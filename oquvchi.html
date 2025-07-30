@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O'quvchi Panel - Reading Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes scale-in {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        @keyframes slide-in {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .fade-in { animation: fade-in 0.6s ease-out; }
+        .scale-in { animation: scale-in 0.4s ease-out; }
+        .slide-in { animation: slide-in 0.5s ease-out; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .option-btn {
+            transition: all 0.3s ease;
+        }
+        .option-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        .option-btn.selected {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+        .progress-bar {
+            transition: width 0.5s ease;
+        }
+        
+        /* Mobile responsive styles */
+        @media (max-width: 768px) {
+            .mobile-text-lg { font-size: 1.125rem; }
+            .mobile-text-xl { font-size: 1.25rem; }
+            .mobile-text-2xl { font-size: 1.5rem; }
+            .mobile-text-3xl { font-size: 1.875rem; }
+            .mobile-text-4xl { font-size: 2.25rem; }
+            .mobile-p-4 { padding: 1rem; }
+            .mobile-p-6 { padding: 1.5rem; }
+            .mobile-p-8 { padding: 2rem; }
+            .mobile-gap-2 { gap: 0.5rem; }
+            .mobile-gap-4 { gap: 1rem; }
+            .mobile-gap-6 { gap: 1.5rem; }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
+    <!-- Header -->
+    <header class="w-full fixed top-0 left-0 z-50 bg-gradient-to-r from-indigo-500/80 to-pink-400/80 shadow-2xl backdrop-blur-md py-3 sm:py-4">
+        <div class="max-w-4xl mx-auto flex items-center justify-between px-4 sm:px-8">
+            <span class="text-lg sm:text-2xl font-extrabold text-white tracking-wide drop-shadow">Reading Test</span>
+            <div class="flex items-center gap-3 sm:gap-6">
+                <div class="text-white font-semibold text-sm sm:text-base">
+                    <span id="progress-text">0%</span> bajarildi
+                </div>
+                <button onclick="showQuestionsModal()" class="relative p-2 text-white hover:bg-white/20 rounded-full transition-all duration-300">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+                    </svg>
+                    <span id="notification-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">0</span>
+                </button>
+                <button onclick="showProfileModal()" class="relative p-2 text-white hover:bg-white/20 rounded-full transition-all duration-300">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="fixed top-16 sm:top-20 left-0 w-full bg-white/20 h-1 z-40">
+        <div id="progress-bar" class="progress-bar h-full bg-gradient-to-r from-indigo-500 to-pink-500 rounded-r-full" style="width: 0%"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="pt-24 sm:pt-32 pb-4 sm:pb-8 px-4 sm:px-8">
+        <div class="max-w-4xl mx-auto">
+            <div id="app" class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl fade-in">
+                <!-- Content will be dynamically loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Questions Modal -->
+    <div id="questionsModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-2 sm:p-4">
+            <div class="bg-white rounded-2xl sm:rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] sm:max-h-[80vh] overflow-hidden">
+                <div class="bg-gradient-to-r from-indigo-500 to-pink-500 p-4 sm:p-6">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-xl sm:text-2xl font-bold text-white">Savollar ro'yxati</h2>
+                        <button onclick="hideQuestionsModal()" class="text-white hover:bg-white/20 p-2 rounded-full transition-all duration-300">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-4 sm:p-6 overflow-y-auto max-h-[70vh] sm:max-h-[60vh]">
+                    <div id="questionsList" class="space-y-3 sm:space-y-4">
+                        <!-- Savollar shu yerda ko'rsatiladi -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profileModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-2 sm:p-4">
+            <div class="bg-white rounded-2xl sm:rounded-3xl shadow-2xl max-w-md w-full overflow-y-auto">
+                <div class="bg-gradient-to-r from-indigo-500 to-pink-500 p-4 sm:p-6">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-xl sm:text-2xl font-bold text-white">Profil</h2>
+                        <button onclick="hideProfileModal()" class="text-white hover:bg-white/20 p-2 rounded-full transition-all duration-300">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-4 sm:p-6">
+                    <div id="profileContent" class="text-center">
+                        <!-- Profil ma'lumotlari shu yerda ko'rsatiladi -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="oquvchi.js"></script>
+</body>
+</html> 
+

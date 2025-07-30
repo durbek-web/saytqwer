@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .section-fade {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .menu-btn {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .menu-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: white;
+            border-radius: 1px;
+        }
+        
+        /* Scrollbar'ni yashirish */
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        
+        /* Jadval responsive */
+        .table-responsive {
+            overflow-x: auto;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .table-responsive::-webkit-scrollbar {
+            display: none;
+        }
+        
+        /* Mobile uchun jadval */
+        @media (max-width: 768px) {
+            .mobile-table {
+                display: block;
+                width: 100%;
+            }
+            
+            .mobile-table thead {
+                display: none;
+            }
+            
+            .mobile-table tbody {
+                display: block;
+            }
+            
+            .mobile-table tr {
+                display: block;
+                margin-bottom: 1rem;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-radius: 0.5rem;
+                padding: 1rem;
+                background: rgba(255, 255, 255, 0.1);
+            }
+            
+            .mobile-table td {
+                display: block;
+                text-align: left;
+                padding: 0.5rem 0;
+                border: none;
+            }
+            
+            .mobile-table td:before {
+                content: attr(data-label) ": ";
+                font-weight: bold;
+                color: rgba(255, 255, 255, 0.8);
+            }
+        }
+        
+        /* Login form */
+        .login-form {
+            animation: slideIn 0.6s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 min-h-screen">
+    <!-- Login Screen -->
+    <div id="loginScreen" class="min-h-screen flex items-center justify-center px-4">
+        <div class="glass-card rounded-3xl p-8 sm:p-12 max-w-md w-full login-form">
+            <div class="text-center mb-8">
+                <div class="text-6xl mb-4">🔐</div>
+                <h1 class="text-3xl sm:text-4xl font-bold text-white mb-2">Admin Panel</h1>
+                <p class="text-white/70 text-sm sm:text-base">Tizimga kirish uchun parolni kiriting</p>
+            </div>
+            
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label class="block text-white font-semibold mb-3 text-sm sm:text-base">Parol:</label>
+                    <input type="password" id="adminPassword" required placeholder="Parolni kiriting..." 
+                           class="w-full px-4 py-3 rounded-xl border-2 border-white/30 bg-white/20 text-white placeholder-white/60 focus:border-white focus:outline-none transition-all duration-300 text-sm sm:text-base">
+                </div>
+                
+                <button type="submit" class="w-full bg-gradient-to-r from-indigo-500 to-pink-500 text-white py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg shadow-lg hover:scale-105 active:scale-95 transition-all duration-300">
+                    Kirish
+                </button>
+            </form>
+            
+            <div class="text-center mt-6">
+                <a href="oquvchi.html" class="text-white/70 hover:text-white text-sm sm:text-base transition-colors">
+                    ← O'quvchi paneliga qaytish
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel Content (Hidden by default) -->
+    <div id="adminContent" class="hidden">
+        <!-- Header -->
+        <header class="w-full fixed top-0 left-0 z-50 bg-gradient-to-r from-indigo-500/80 to-pink-400/80 shadow-2xl backdrop-blur-md py-4">
+            <div class="max-w-3xl mx-auto flex items-center justify-between px-8">
+                <span class="text-2xl font-extrabold text-white tracking-wide drop-shadow">Admin Panel</span>
+                <nav class="flex gap-8">
+                    <button id="menu-students" class="menu-btn text-white text-lg font-semibold focus:outline-none">O'quvchilar</button>
+                    <button id="menu-tests" class="menu-btn text-white text-lg font-semibold focus:outline-none">Test qo'shish</button>
+                    <button id="logoutBtn" class="text-white hover:text-red-300 text-lg font-semibold focus:outline-none transition-colors">Chiqish</button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="pt-24 pb-8 px-4 sm:px-8">
+            <div class="max-w-6xl mx-auto">
+                <!-- Statistika -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8">
+                    <div class="glass-card rounded-2xl p-4 sm:p-6 text-center">
+                        <div class="text-3xl sm:text-4xl font-bold text-white mb-2" id="questionCount">0</div>
+                        <div class="text-white/80 text-sm sm:text-base">Jami savollar</div>
+                    </div>
+                    <div class="glass-card rounded-2xl p-4 sm:p-6 text-center">
+                        <div class="text-3xl sm:text-4xl font-bold text-white mb-2" id="studentCount">0</div>
+                        <div class="text-white/80 text-sm sm:text-base">Ro'yxatdan o'tgan o'quvchilar</div>
+                    </div>
+                    <div class="glass-card rounded-2xl p-4 sm:p-6 text-center">
+                        <div class="text-3xl sm:text-4xl font-bold text-white mb-2" id="totalTests">0</div>
+                        <div class="text-white/80 text-sm sm:text-base">Jami test ishlangan</div>
+                    </div>
+                </div>
+
+                <!-- O'quvchilar bo'limi -->
+                <div id="students-section" class="section-fade">
+                    <div class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 mb-8">
+                        <h2 class="text-2xl sm:text-3xl font-bold text-white mb-6">O'quvchilar ro'yxati</h2>
+                        <div class="table-responsive">
+                            <table class="w-full mobile-table">
+                                <thead class="bg-white/20">
+                                    <tr>
+                                        <th class="py-3 px-2 sm:px-4 text-left text-white font-bold text-sm sm:text-base">#</th>
+                                        <th class="py-3 px-2 sm:px-4 text-left text-white font-bold text-sm sm:text-base">Ism</th>
+                                        <th class="py-3 px-2 sm:px-4 text-left text-white font-bold text-sm sm:text-base hidden sm:table-cell">Telefon</th>
+                                        <th class="py-3 px-2 sm:px-4 text-left text-white font-bold text-sm sm:text-base hidden lg:table-cell">Email</th>
+                                        <th class="py-3 px-2 sm:px-4 text-left text-white font-bold text-sm sm:text-base hidden lg:table-cell">Ro'yxatdan o'tgan</th>
+                                        <th class="py-3 px-2 sm:px-4 text-left text-white font-bold text-sm sm:text-base hidden xl:table-cell">Oxirgi tashrif</th>
+                                        <th class="py-3 px-2 sm:px-4 text-center text-white font-bold text-sm sm:text-base">Testlar</th>
+                                        <th class="py-3 px-2 sm:px-4 text-center text-white font-bold text-sm sm:text-base hidden sm:table-cell">O'rtacha baho</th>
+                                        <th class="py-3 px-2 sm:px-4 text-center text-white font-bold text-sm sm:text-base">Batafsil</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="studentsTable" class="text-white">
+                                    <!-- JavaScript bilan to'ldiriladi -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Test qo'shish bo'limi -->
+                <div id="tests-section" class="section-fade hidden">
+                    <div class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 mb-8">
+                        <h2 class="text-2xl sm:text-3xl font-bold text-white mb-6">Yangi savol qo'shish</h2>
+                        <form id="addForm" class="space-y-4 sm:space-y-6">
+                            <div>
+                                <label class="block text-white font-semibold mb-2 text-sm sm:text-base">Savol matni:</label>
+                                <textarea id="qText" required placeholder="Savol matnini kiriting..." 
+                                          class="w-full px-4 py-3 rounded-xl border-2 border-white/30 bg-white/20 text-white placeholder-white/60 focus:border-white focus:outline-none transition-all duration-300 text-sm sm:text-base resize-none" rows="3"></textarea>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-white font-semibold mb-2 text-sm sm:text-base">A variant:</label>
+                                    <input type="text" id="optA" required placeholder="A variant..." 
+                                           class="w-full px-4 py-3 rounded-xl border-2 border-white/30 bg-white/20 text-white placeholder-white/60 focus:border-white focus:outline-none transition-all duration-300 text-sm sm:text-base">
+                                </div>
+                                <div>
+                                    <label class="block text-white font-semibold mb-2 text-sm sm:text-base">B variant:</label>
+                                    <input type="text" id="optB" required placeholder="B variant..." 
+                                           class="w-full px-4 py-3 rounded-xl border-2 border-white/30 bg-white/20 text-white placeholder-white/60 focus:border-white focus:outline-none transition-all duration-300 text-sm sm:text-base">
+                                </div>
+                                <div>
+                                    <label class="block text-white font-semibold mb-2 text-sm sm:text-base">C variant:</label>
+                                    <input type="text" id="optC" required placeholder="C variant..." 
+                                           class="w-full px-4 py-3 rounded-xl border-2 border-white/30 bg-white/20 text-white placeholder-white/60 focus:border-white focus:outline-none transition-all duration-300 text-sm sm:text-base">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-white font-semibold mb-2 text-sm sm:text-base">To'g'ri javob:</label>
+                                <select id="qAnswer" required 
+                                        class="w-full px-4 py-3 rounded-xl border-2 border-white/30 bg-white/20 text-white focus:border-white focus:outline-none transition-all duration-300 text-sm sm:text-base">
+                                    <option value="">Tanlang...</option>
+                                    <option value="0">A</option>
+                                    <option value="1">B</option>
+                                    <option value="2">C</option>
+                                </select>
+                            </div>
+                            
+                            <button type="submit" class="w-full bg-gradient-to-r from-indigo-500 to-pink-500 text-white py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg shadow-lg hover:scale-105 active:scale-95 transition-all duration-300">
+                                Savol qo'shish
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8">
+                        <h2 class="text-2xl sm:text-3xl font-bold text-white mb-6">Mavjud savollar</h2>
+                        <div class="table-responsive">
+                            <table class="w-full mobile-table">
+                                <thead class="bg-white/20">
+                                    <tr>
+                                        <th class="py-3 px-2 sm:px-4 text-left text-white font-bold text-sm sm:text-base">#</th>
+                                        <th class="py-3 px-2 sm:px-4 text-left text-white font-bold text-sm sm:text-base">Savol</th>
+                                        <th class="py-3 px-2 sm:px-4 text-left text-white font-bold text-sm sm:text-base hidden sm:table-cell">A</th>
+                                        <th class="py-3 px-2 sm:px-4 text-left text-white font-bold text-sm sm:text-base hidden sm:table-cell">B</th>
+                                        <th class="py-3 px-2 sm:px-4 text-left text-white font-bold text-sm sm:text-base hidden sm:table-cell">C</th>
+                                        <th class="py-3 px-2 sm:px-4 text-center text-white font-bold text-sm sm:text-base">To'g'ri</th>
+                                        <th class="py-3 px-2 sm:px-4 text-center text-white font-bold text-sm sm:text-base">O'chir</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="questionsTable" class="text-white">
+                                    <!-- JavaScript bilan to'ldiriladi -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- O'quvchi batafsil ma'lumotlari modal -->
+        <div id="studentDetailsModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+            <!-- Modal content JavaScript bilan to'ldiriladi -->
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
