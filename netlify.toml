@@ -1,0 +1,12 @@
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/"
+  to = "/oquvchi.html"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/oquvchi.html"
+  status = 200 

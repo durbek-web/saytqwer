@@ -409,10 +409,6 @@ function getNoQuestionsHTML() {
         <div class="text-center py-16">
             <div class="text-6xl mb-4">📚</div>
             <h2 class="text-3xl font-bold text-white mb-4">Savollar mavjud emas</h2>
-            <p class="text-white/80 text-lg mb-8">Iltimos, admin paneldan savollar qo'shing</p>
-            <a href="admin.html" class="inline-block bg-gradient-to-r from-indigo-500 to-pink-500 text-white px-8 py-3 rounded-2xl font-bold hover:scale-105 transition-all duration-300">
-                Admin panelga o'tish
-            </a>
         </div>
     `;
 }
