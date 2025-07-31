@@ -5,59 +5,351 @@ let answers = {};
 let testFinished = false;
 let currentStudent = null;
 
-// Standart test savollari (agar LocalStorage bo'sh bo'lsa)
-const defaultQuestions = [
+// Avtomatik test qo'shish tizimi
+let autoTestTimer = null;
+let lastTestCompletionTime = null;
+
+// Test bazasi - barcha mumkin bo'lgan testlar
+const TEST_DATABASE = [
     {
-        text: "O'zbekiston Respublikasi Oliy Majlisining qonun chiqaruvchi organi hisoblanadi. U qanday tuzilishga ega?",
+        text: "The Industrial Revolution, which began in Britain in the late 18th century, marked a fundamental change in the way goods were produced. This period saw the transition from manual production methods to machines, new chemical manufacturing and iron production processes, improved efficiency of water power, the increasing use of steam power, and the development of machine tools. The Industrial Revolution also led to the rise of the factory system and the growth of cities. What was the primary technological advancement that enabled the Industrial Revolution?",
         options: [
-            "Bir palatali tuzilishga ega",
-            "Ikki palatali tuzilishga ega", 
-            "Uch palatali tuzilishga ega"
+            "The development of electricity",
+            "The invention of the steam engine",
+            "The creation of the internet",
+            "The discovery of nuclear power"
         ],
         answer: 1
     },
     {
-        text: "O'zbekiston Respublikasining davlat tili qaysi til hisoblanadi?",
+        text: "Climate change refers to long-term shifts in global or regional climate patterns. While climate has changed throughout Earth's history, the current warming trend is of particular significance because it is proceeding at a rate that is unprecedented over the past 10,000 years. According to the Intergovernmental Panel on Climate Change (IPCC), the current warming trend is extremely likely to be the result of human activity since the mid-20th century. The primary cause of current climate change is the increase in greenhouse gas concentrations in the atmosphere. Which of the following best describes the main cause of current climate change?",
         options: [
-            "O'zbek tili",
-            "Rus tili",
-            "Ingliz tili"
+            "Natural variations in Earth's orbit",
+            "Volcanic eruptions",
+            "Human activities releasing greenhouse gases",
+            "Changes in solar radiation"
         ],
-        answer: 0
+        answer: 2
     },
     {
-        text: "O'zbekiston Respublikasining poytaxti qaysi shahar?",
+        text: "Artificial Intelligence (AI) has become one of the most transformative technologies of the 21st century. Machine learning, a subset of AI, enables computers to learn and make decisions without being explicitly programmed for every task. Deep learning, which uses neural networks with multiple layers, has revolutionized fields such as image recognition, natural language processing, and autonomous vehicles. However, AI also raises important ethical questions about privacy, job displacement, and decision-making transparency. What is the primary characteristic of machine learning?",
         options: [
-            "Samarqand",
-            "Toshkent",
-            "Buxoro"
+            "It requires explicit programming for every task",
+            "It enables computers to learn without explicit programming",
+            "It only works with large datasets",
+            "It is limited to mathematical calculations"
         ],
         answer: 1
     },
     {
-        text: "O'zbekiston Respublikasi mustaqillikka qachon erishdi?",
+        text: "The human brain is the most complex organ in the human body, containing approximately 86 billion neurons connected by trillions of synapses. It is responsible for all cognitive functions, including memory, learning, decision-making, and consciousness. The brain processes information through electrical and chemical signals, with different regions specialized for specific functions. Recent advances in neuroscience have revealed the brain's remarkable plasticity—its ability to form new neural connections throughout life. What is the approximate number of neurons in the human brain?",
         options: [
-            "1990 yil 31 avgust",
-            "1991 yil 31 avgust",
-            "1992 yil 31 avgust"
+            "100 million neurons",
+            "1 billion neurons",
+            "86 billion neurons",
+            "1 trillion neurons"
+        ],
+        answer: 2
+    },
+    {
+        text: "Quantum computing represents a paradigm shift in computational power, utilizing quantum mechanical phenomena such as superposition and entanglement to process information. Unlike classical computers that use bits (0 or 1), quantum computers use quantum bits or qubits, which can exist in multiple states simultaneously. This allows quantum computers to solve certain problems exponentially faster than classical computers. However, quantum computers are highly sensitive to environmental interference and require extremely low temperatures to operate. What is the fundamental unit of information in quantum computing?",
+        options: [
+            "Bit (0 or 1)",
+            "Byte (8 bits)",
+            "Qubit (quantum bit)",
+            "Pixel (picture element)"
+        ],
+        answer: 2
+    },
+    {
+        text: "The theory of evolution by natural selection, proposed by Charles Darwin in 1859, explains how species change over time through the process of adaptation. According to this theory, individuals with traits that are advantageous for survival and reproduction are more likely to pass those traits to their offspring. Over many generations, these advantageous traits become more common in the population, leading to evolutionary change. The theory is supported by extensive evidence from multiple scientific disciplines. What is the primary mechanism driving evolution according to Darwin's theory?",
+        options: [
+            "Random genetic mutations",
+            "Natural selection",
+            "Geographic isolation",
+            "Artificial breeding"
         ],
         answer: 1
     },
     {
-        text: "O'zbekiston Respublikasining davlat bayrog'i qanday ranglardan iborat?",
+        text: "Renewable energy sources, such as solar, wind, and hydroelectric power, are becoming increasingly important as the world seeks to reduce greenhouse gas emissions and combat climate change. Unlike fossil fuels, renewable energy sources are naturally replenished and produce little to no emissions during operation. Solar energy, which harnesses the power of the sun, has seen dramatic cost reductions in recent years, making it competitive with traditional energy sources in many regions. What is the main advantage of renewable energy sources over fossil fuels?",
         options: [
-            "Ko'k, oq va yashil",
-            "Oq, ko'k va qizil",
-            "Yashil, oq va ko'k"
+            "They are always available",
+            "They produce no emissions during operation",
+            "They are cheaper to install",
+            "They require no maintenance"
         ],
-        answer: 0
+        answer: 1
+    },
+    {
+        text: "The human genome, which contains all the genetic information needed to build and maintain a human being, consists of approximately 3 billion base pairs of DNA. This genetic code is organized into 23 pairs of chromosomes and contains an estimated 20,000-25,000 genes. The Human Genome Project, completed in 2003, successfully mapped the entire human genome, providing scientists with a comprehensive understanding of human genetics. This knowledge has revolutionized medicine, enabling the development of personalized treatments and genetic therapies. How many base pairs of DNA are in the human genome?",
+        options: [
+            "1 billion base pairs",
+            "3 billion base pairs",
+            "5 billion base pairs",
+            "10 billion base pairs"
+        ],
+        answer: 1
+    },
+    {
+        text: "Space exploration has advanced significantly since the first human spaceflight in 1961. Modern space missions utilize sophisticated technology, including robotic probes, satellites, and space stations. The International Space Station (ISS), a collaborative project involving multiple countries, has been continuously inhabited since 2000 and serves as a laboratory for scientific research in microgravity. Private companies are now also entering the space industry, developing reusable rockets and planning commercial space tourism. What is the primary purpose of the International Space Station?",
+        options: [
+            "Military surveillance",
+            "Commercial space tourism",
+            "Scientific research in microgravity",
+            "Satellite repair and maintenance"
+        ],
+        answer: 2
+    },
+    {
+        text: "The internet, originally developed as a military communication network in the 1960s, has evolved into a global system that connects billions of devices worldwide. It operates on a decentralized architecture, with data transmitted through a network of interconnected routers and servers. The World Wide Web, created by Tim Berners-Lee in 1989, provides a user-friendly interface for accessing information on the internet through web browsers. The internet has transformed nearly every aspect of modern life, from communication and commerce to education and entertainment. What was the original purpose of the internet?",
+        options: [
+            "Commercial communication",
+            "Military communication",
+            "Academic research",
+            "Entertainment and gaming"
+        ],
+        answer: 1
+    },
+    {
+        text: "The human immune system is a complex network of cells, tissues, and organs that work together to defend the body against harmful pathogens such as bacteria, viruses, and fungi. The immune system has two main components: the innate immune system, which provides immediate but non-specific defense, and the adaptive immune system, which provides long-term, specific immunity. White blood cells, including T cells and B cells, play crucial roles in the adaptive immune response. What are the two main components of the human immune system?",
+        options: [
+            "Red blood cells and white blood cells",
+            "Innate and adaptive immune systems",
+            "Bones and muscles",
+            "Heart and lungs"
+        ],
+        answer: 1
+    },
+    {
+        text: "Photosynthesis is the process by which plants, algae, and some bacteria convert light energy into chemical energy that can be used to fuel their activities. During photosynthesis, carbon dioxide and water are converted into glucose and oxygen using energy from sunlight. This process occurs in specialized organelles called chloroplasts, which contain the green pigment chlorophyll. Photosynthesis is essential for life on Earth as it produces oxygen and forms the base of most food chains. What are the main products of photosynthesis?",
+        options: [
+            "Carbon dioxide and water",
+            "Glucose and oxygen",
+            "Nitrogen and hydrogen",
+            "Methane and carbon monoxide"
+        ],
+        answer: 1
+    },
+    {
+        text: "The periodic table is a systematic arrangement of chemical elements based on their atomic number, electron configuration, and recurring chemical properties. Elements are organized into periods (rows) and groups (columns), with elements in the same group having similar chemical properties. The periodic table was first developed by Dmitri Mendeleev in 1869 and has since been expanded to include 118 known elements. What is the primary organizing principle of the periodic table?",
+        options: [
+            "Element names in alphabetical order",
+            "Atomic number and chemical properties",
+            "Element colors and physical appearance",
+            "Discovery date of elements"
+        ],
+        answer: 1
+    },
+    {
+        text: "The theory of relativity, developed by Albert Einstein in the early 20th century, consists of two parts: special relativity and general relativity. Special relativity deals with the relationship between space and time, while general relativity describes gravity as a curvature of spacetime caused by mass and energy. These theories have revolutionized our understanding of the universe and have been confirmed by numerous experiments and observations. What are the two main parts of Einstein's theory of relativity?",
+        options: [
+            "Quantum mechanics and classical physics",
+            "Special relativity and general relativity",
+            "Nuclear physics and particle physics",
+            "Thermodynamics and electromagnetism"
+        ],
+        answer: 1
+    },
+    {
+        text: "The cell is the basic structural and functional unit of all known living organisms. Cells can be classified into two main types: prokaryotic cells, which lack a nucleus and membrane-bound organelles, and eukaryotic cells, which have a nucleus and various organelles. All cells contain genetic material, cytoplasm, and a cell membrane. The cell theory states that all living things are composed of cells, cells are the basic units of life, and all cells come from pre-existing cells. What are the two main types of cells?",
+        options: [
+            "Plant cells and animal cells",
+            "Prokaryotic and eukaryotic cells",
+            "Red cells and white cells",
+            "Nerve cells and muscle cells"
+        ],
+        answer: 1
+    },
+    {
+        text: "The water cycle, also known as the hydrologic cycle, describes the continuous movement of water on, above, and below the surface of the Earth. This cycle involves several key processes: evaporation, condensation, precipitation, and collection. Water evaporates from oceans, lakes, and rivers, forms clouds through condensation, falls as precipitation, and eventually returns to water bodies through runoff and groundwater flow. What are the main processes involved in the water cycle?",
+        options: [
+            "Melting, freezing, and boiling",
+            "Evaporation, condensation, precipitation, and collection",
+            "Photosynthesis and respiration",
+            "Erosion and deposition"
+        ],
+        answer: 1
+    },
+    {
+        text: "The nervous system is the body's electrical wiring, consisting of the brain, spinal cord, and a vast network of nerves that transmit signals throughout the body. It is divided into two main parts: the central nervous system (CNS), which includes the brain and spinal cord, and the peripheral nervous system (PNS), which includes all the nerves outside the CNS. The nervous system controls all bodily functions, from basic reflexes to complex thoughts and emotions. What are the two main parts of the nervous system?",
+        options: [
+            "Brain and heart",
+            "Central nervous system and peripheral nervous system",
+            "Arteries and veins",
+            "Bones and muscles"
+        ],
+        answer: 1
+    },
+    {
+        text: "The digestive system is responsible for breaking down food into nutrients that can be absorbed and used by the body. This process involves several organs working together: the mouth, esophagus, stomach, small intestine, large intestine, liver, and pancreas. Food is mechanically and chemically broken down as it passes through these organs, with nutrients being absorbed into the bloodstream and waste products being eliminated. What is the primary function of the digestive system?",
+        options: [
+            "To pump blood throughout the body",
+            "To break down food into absorbable nutrients",
+            "To produce hormones",
+            "To filter waste from the blood"
+        ],
+        answer: 1
+    },
+    {
+        text: "The circulatory system, also known as the cardiovascular system, is responsible for transporting blood, nutrients, oxygen, and waste products throughout the body. It consists of the heart, blood vessels (arteries, veins, and capillaries), and blood. The heart pumps blood through the vessels, delivering oxygen and nutrients to cells while removing carbon dioxide and other waste products. What is the main function of the circulatory system?",
+        options: [
+            "To digest food",
+            "To transport blood and nutrients throughout the body",
+            "To produce hormones",
+            "To filter the air we breathe"
+        ],
+        answer: 1
+    },
+    {
+        text: "The respiratory system is responsible for gas exchange, bringing oxygen into the body and removing carbon dioxide. It includes the nose, mouth, throat, windpipe (trachea), bronchi, and lungs. When we breathe in, air travels through these structures to reach the alveoli in the lungs, where oxygen is absorbed into the bloodstream and carbon dioxide is released. What is the primary function of the respiratory system?",
+        options: [
+            "To pump blood",
+            "To exchange gases (oxygen and carbon dioxide)",
+            "To digest food",
+            "To produce hormones"
+        ],
+        answer: 1
     }
 ];
 
-// Agar LocalStorage bo'sh bo'lsa, standart savollarni qo'shish
-if (questions.length === 0) {
-    localStorage.setItem('reading_questions', JSON.stringify(defaultQuestions));
-    questions = defaultQuestions;
+// Avtomatik test qo'shish funksiyasi
+function addAutomaticTests() {
+    // Sozlamalarni tekshirish
+    const settings = JSON.parse(localStorage.getItem('auto_test_settings') || '{}');
+    if (settings.enabled === false) {
+        console.log('Avtomatik test qo\'shish o\'chirilgan');
+        return;
+    }
+    
+    const usedTests = JSON.parse(localStorage.getItem('used_tests') || '[]');
+    const availableTests = TEST_DATABASE.filter(test => 
+        !usedTests.some(used => used.text === test.text)
+    );
+    
+    if (availableTests.length === 0) {
+        console.log('Barcha testlar ishlatilgan, testlar qayta ishlatiladi');
+        localStorage.setItem('used_tests', JSON.stringify([]));
+        return addAutomaticTests();
+    }
+    
+    // Sozlamalardan testlar sonini olish
+    const testCount = settings.testCount || Math.floor(Math.random() * 6) + 5; // 5-10 ta
+    const newTests = [];
+    const usedTestTexts = [];
+    
+    for (let i = 0; i < Math.min(testCount, availableTests.length); i++) {
+        const randomIndex = Math.floor(Math.random() * availableTests.length);
+        const selectedTest = availableTests[randomIndex];
+        
+        newTests.push(selectedTest);
+        usedTestTexts.push(selectedTest.text);
+        
+        // Tanlangan testni availableTests dan olib tashlash
+        availableTests.splice(randomIndex, 1);
+    }
+    
+    // Yangi testlarni qo'shish
+    questions = [...questions, ...newTests];
+    localStorage.setItem('reading_questions', JSON.stringify(questions));
+    
+    // Ishlatilgan testlarni saqlash
+    const updatedUsedTests = [...usedTests, ...usedTestTexts];
+    localStorage.setItem('used_tests', JSON.stringify(updatedUsedTests));
+    
+    console.log(`${newTests.length} ta yangi test avtomatik qo'shildi!`);
+    
+    // Foydalanuvchiga xabar berish
+    showAutoTestNotification(newTests.length);
+    
+    // Notification count yangilash
+    updateNotificationCount();
+}
+
+// Avtomatik test qo'shish xabarini ko'rsatish
+function showAutoTestNotification(testCount) {
+    const notification = document.createElement('div');
+    notification.className = 'fixed top-4 right-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-4 rounded-xl shadow-lg z-50 transform translate-x-full transition-transform duration-500';
+    notification.innerHTML = `
+        <div class="flex items-center gap-3">
+            <div class="text-2xl">🎉</div>
+            <div>
+                <div class="font-bold">Yangi testlar qo'shildi!</div>
+                <div class="text-sm opacity-90">${testCount} ta yangi test mavjud</div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Xabarni ko'rsatish
+    setTimeout(() => {
+        notification.classList.remove('translate-x-full');
+    }, 100);
+    
+    // Xabarni yashirish
+    setTimeout(() => {
+        notification.classList.add('translate-x-full');
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 500);
+    }, 5000);
+}
+
+// Test tugagandan keyin avtomatik test qo'shish timerini boshlash
+function startAutoTestTimer() {
+    // Avvalgi timer-ni to'xtatish
+    if (autoTestTimer) {
+        clearTimeout(autoTestTimer);
+    }
+    
+    // Sozlamalardan vaqtni olish
+    const settings = JSON.parse(localStorage.getItem('auto_test_settings') || '{}');
+    const delayMinutes = settings.delay || 2;
+    
+    // Vaqtni millisekundga o'tkazish
+    const delayMs = delayMinutes * 60 * 1000;
+    
+    // Timer boshlash
+    autoTestTimer = setTimeout(() => {
+        addAutomaticTests();
+        lastTestCompletionTime = new Date().toISOString();
+        localStorage.setItem('last_test_completion', lastTestCompletionTime);
+    }, delayMs);
+    
+    console.log(`Avtomatik test qo'shish timer boshladi (${delayMinutes} daqiqa)`);
+}
+
+// Sahifa yuklanganda avtomatik test qo'shishni tekshirish
+function checkAutoTestAddition() {
+    // Sozlamalarni tekshirish
+    const settings = JSON.parse(localStorage.getItem('auto_test_settings') || '{}');
+    if (settings.enabled === false) {
+        console.log('Avtomatik test qo\'shish o\'chirilgan');
+        return;
+    }
+    
+    const lastCompletion = localStorage.getItem('last_test_completion');
+    if (lastCompletion) {
+        const lastTime = new Date(lastCompletion);
+        const currentTime = new Date();
+        const timeDiff = currentTime - lastTime;
+        
+        // Sozlamalardan vaqtni olish
+        const delayMinutes = settings.delay || 2;
+        const delayMs = delayMinutes * 60 * 1000;
+        
+        // Agar oxirgi test tugatilganidan ko'p vaqt o'tgan bo'lsa
+        if (timeDiff > delayMs) {
+            console.log(`Oxirgi test tugatilganidan ${delayMinutes} daqiqadan ko'p vaqt o'tgan, yangi testlar qo'shiladi`);
+            addAutomaticTests();
+            localStorage.setItem('last_test_completion', currentTime.toISOString());
+        } else {
+            console.log(`Oxirgi test tugatilganidan ${Math.round(timeDiff / 60000)} daqiqa o'tgan, hali vaqt emas`);
+        }
+    } else {
+        console.log('Oxirgi test tugatilgan vaqt topilmadi');
+    }
 }
 
 // O'quvchi ma'lumotlarini saqlash
@@ -634,6 +926,9 @@ function finishTest() {
     
     testFinished = true;
     renderResult();
+    
+    // Avtomatik test qo'shish timerini boshlash
+    startAutoTestTimer();
 }
 
 // Natijani ko'rsatish
@@ -781,13 +1076,10 @@ function sendRegistrationToTelegram(studentData) {
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', function() {
-    // Standart savollarni tekshirish va qo'shish
-    if (questions.length === 0) {
-        localStorage.setItem('reading_questions', JSON.stringify(defaultQuestions));
-        questions = defaultQuestions;
-    }
-    
     showRegistration();
+    
+    // Avtomatik test qo'shishni tekshirish
+    checkAutoTestAddition();
     
     // Form submit event listener qo'shish
     setTimeout(() => {

@@ -126,32 +126,62 @@
                 font-size: 1.1em;
             }
             
+            .mobile-table td:nth-child(3):before {
+                content: "Telefon: ";
+                font-weight: bold;
+                color: rgba(255, 255, 255, 0.9);
+            }
+            
+            .mobile-table td:nth-child(4):before {
+                content: "Email: ";
+                font-weight: bold;
+                color: rgba(255, 255, 255, 0.9);
+            }
+            
+            .mobile-table td:nth-child(5):before {
+                content: "Ro'yxatdan o'tgan: ";
+                font-weight: bold;
+                color: rgba(255, 255, 255, 0.9);
+            }
+            
+            .mobile-table td:nth-child(6):before {
+                content: "Oxirgi tashrif: ";
+                font-weight: bold;
+                color: rgba(255, 255, 255, 0.9);
+            }
+            
             .mobile-table td:nth-child(7):before {
                 content: "Testlar: ";
                 font-weight: bold;
                 color: rgba(255, 255, 255, 0.9);
             }
             
-            .mobile-table td:nth-child(9):before {
+            .mobile-table td:nth-child(8):before {
+                content: "O'rtacha baho: ";
+                font-weight: bold;
+                color: rgba(255, 255, 255, 0.9);
+            }
+            
+            .mobile-table td:last-child:before {
                 content: "Batafsil: ";
                 font-weight: bold;
                 color: rgba(255, 255, 255, 0.9);
             }
             
-            .mobile-table td:nth-child(10):before {
+            .mobile-table td:nth-last-child(2):before {
                 content: "O'chir: ";
                 font-weight: bold;
                 color: rgba(255, 255, 255, 0.9);
             }
             
-            .mobile-table td:nth-last-child(2) {
+            .mobile-table td:last-child {
                 text-align: center;
                 padding-top: 1rem;
                 border-top: 1px solid rgba(255, 255, 255, 0.1);
                 margin-top: 0.5rem;
             }
             
-            .mobile-table td:last-child {
+            .mobile-table td:nth-last-child(2) {
                 text-align: center;
                 padding-top: 1rem;
                 border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -373,6 +403,60 @@
                                     <!-- JavaScript bilan to'ldiriladi -->
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Avtomatik test qo'shish sozlamalari -->
+                <div class="bg-white/10 rounded-2xl p-4 sm:p-6 mb-4 sm:mb-6">
+                    <h3 class="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">🤖 Avtomatik Test Qo'shish</h3>
+                    <div class="space-y-3 sm:space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-white font-semibold text-sm sm:text-base">Avtomatik qo'shish:</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="autoTestToggle" class="sr-only peer" checked>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                            </label>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                            <div>
+                                <label class="block text-white font-semibold mb-2 text-sm sm:text-base">Testlar soni (5-10):</label>
+                                <input type="number" id="autoTestCount" min="5" max="10" value="7" 
+                                       class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border-2 border-white/30 bg-white/20 text-white placeholder-white/60 focus:border-white focus:outline-none transition-all duration-300 text-sm sm:text-base">
+                            </div>
+                            <div>
+                                <label class="block text-white font-semibold mb-2 text-sm sm:text-base">Vaqt (daqiqa):</label>
+                                <input type="number" id="autoTestDelay" min="1" max="60" value="2" 
+                                       class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border-2 border-white/30 bg-white/20 text-white placeholder-white/60 focus:border-white focus:outline-none transition-all duration-300 text-sm sm:text-base">
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                            <button onclick="saveAutoTestSettings()" 
+                                    class="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:scale-105 text-sm sm:text-base">
+                                💾 Sozlamalarni saqlash
+                            </button>
+                            <button onclick="testAutoTestSystem()" 
+                                    class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:scale-105 text-sm sm:text-base">
+                                🧪 Test qilish
+                            </button>
+                            <button onclick="resetAutoTestSystem()" 
+                                    class="bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:scale-105 text-sm sm:text-base">
+                                🔄 Qayta boshlash
+                            </button>
+                        </div>
+                        
+                        <div class="bg-white/10 rounded-xl p-3 sm:p-4">
+                            <div class="text-white text-sm sm:text-base">
+                                <div class="font-semibold mb-2">📊 Avtomatik test statistikasi:</div>
+                                <div class="space-y-1">
+                                    <div>Jami testlar bazasi: <span id="totalTestDatabase" class="font-bold">20</span></div>
+                                    <div>Ishlatilgan testlar: <span id="usedTestsCount" class="font-bold">0</span></div>
+                                    <div>Qolgan testlar: <span id="remainingTests" class="font-bold">20</span></div>
+                                    <div>Oxirgi qo'shilgan: <span id="lastAddedTime" class="font-bold">-</span></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

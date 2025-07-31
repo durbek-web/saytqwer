@@ -116,64 +116,6 @@ function setStudentVisits(count) {
     localStorage.setItem('student_visits', count.toString());
 }
 
-// Standart test savollari (agar LocalStorage bo'sh bo'lsa)
-const defaultQuestions = [
-    {
-        text: "O'zbekiston Respublikasi Oliy Majlisining qonun chiqaruvchi organi hisoblanadi. U qanday tuzilishga ega?",
-        options: [
-            "Bir palatali tuzilishga ega",
-            "Ikki palatali tuzilishga ega", 
-            "Uch palatali tuzilishga ega"
-        ],
-        answer: 1
-    },
-    {
-        text: "O'zbekiston Respublikasining davlat tili qaysi til hisoblanadi?",
-        options: [
-            "O'zbek tili",
-            "Rus tili",
-            "Ingliz tili"
-        ],
-        answer: 0
-    },
-    {
-        text: "O'zbekiston Respublikasining poytaxti qaysi shahar?",
-        options: [
-            "Samarqand",
-            "Toshkent",
-            "Buxoro"
-        ],
-        answer: 1
-    },
-    {
-        text: "O'zbekiston Respublikasi mustaqillikka qachon erishdi?",
-        options: [
-            "1990 yil 31 avgust",
-            "1991 yil 31 avgust",
-            "1992 yil 31 avgust"
-        ],
-        answer: 1
-    },
-    {
-        text: "O'zbekiston Respublikasining davlat bayrog'i qanday ranglardan iborat?",
-        options: [
-            "Ko'k, oq va yashil",
-            "Oq, ko'k va qizil",
-            "Yashil, oq va ko'k"
-        ],
-        answer: 0
-    }
-];
-
-// Agar LocalStorage bo'sh bo'lsa, standart savollarni qo'shish
-function initializeDefaultQuestions() {
-    const questions = getQuestions();
-    if (questions.length === 0) {
-        setQuestions(defaultQuestions);
-        console.log('Standart test savollari qo\'shildi');
-    }
-}
-
 // Mavjud savollardan "Read the passage:" ni olib tashlash
 function cleanExistingQuestions() {
     const questions = getQuestions();
@@ -497,6 +439,119 @@ function exportQuestions() {
     link.click();
 }
 
+// Avtomatik test sozlamalarini saqlash
+function saveAutoTestSettings() {
+    const isEnabled = document.getElementById('autoTestToggle').checked;
+    const testCount = parseInt(document.getElementById('autoTestCount').value);
+    const delay = parseInt(document.getElementById('autoTestDelay').value);
+    
+    const settings = {
+        enabled: isEnabled,
+        testCount: testCount,
+        delay: delay,
+        lastUpdated: new Date().toISOString()
+    };
+    
+    localStorage.setItem('auto_test_settings', JSON.stringify(settings));
+    alert('Avtomatik test sozlamalari saqlandi!');
+    updateAutoTestStats();
+}
+
+// Avtomatik test sozlamalarini yuklash
+function loadAutoTestSettings() {
+    const settings = JSON.parse(localStorage.getItem('auto_test_settings') || '{}');
+    
+    if (settings.enabled !== undefined) {
+        document.getElementById('autoTestToggle').checked = settings.enabled;
+    }
+    if (settings.testCount) {
+        document.getElementById('autoTestCount').value = settings.testCount;
+    }
+    if (settings.delay) {
+        document.getElementById('autoTestDelay').value = settings.delay;
+    }
+}
+
+// Avtomatik test statistikalarini yangilash
+function updateAutoTestStats() {
+    const usedTests = JSON.parse(localStorage.getItem('used_tests') || '[]');
+    const totalTests = 20; // TEST_DATABASE length
+    const remainingTests = totalTests - usedTests.length;
+    const lastAdded = localStorage.getItem('last_test_completion');
+    
+    document.getElementById('totalTestDatabase').textContent = totalTests;
+    document.getElementById('usedTestsCount').textContent = usedTests.length;
+    document.getElementById('remainingTests').textContent = remainingTests;
+    
+    if (lastAdded) {
+        const lastTime = new Date(lastAdded);
+        document.getElementById('lastAddedTime').textContent = lastTime.toLocaleString('uz-UZ');
+    } else {
+        document.getElementById('lastAddedTime').textContent = '-';
+    }
+}
+
+// Avtomatik test tizimini test qilish
+function testAutoTestSystem() {
+    const settings = JSON.parse(localStorage.getItem('auto_test_settings') || '{}');
+    if (!settings.enabled) {
+        alert('Avtomatik test qo\'shish o\'chirilgan!');
+        return;
+    }
+    
+    // Test qo'shish simulyatsiyasi
+    const testCount = settings.testCount || 7;
+    const usedTests = JSON.parse(localStorage.getItem('used_tests') || '[]');
+    const availableTests = 20 - usedTests.length;
+    
+    if (availableTests < testCount) {
+        alert(`Faqat ${availableTests} ta test qoldi! Avval testlar bazasini to'ldiring.`);
+        return;
+    }
+    
+    // Simulyatsiya qilish
+    const newTests = [];
+    for (let i = 0; i < testCount; i++) {
+        newTests.push({
+            text: `Test savol ${i + 1}`,
+            options: ['A', 'B', 'C', 'D'],
+            answer: 0
+        });
+    }
+    
+    const currentQuestions = getQuestions();
+    const updatedQuestions = [...currentQuestions, ...newTests];
+    setQuestions(updatedQuestions);
+    
+    // Ishlatilgan testlarni yangilash
+    const newUsedTests = [...usedTests, ...newTests.map(t => t.text)];
+    localStorage.setItem('used_tests', JSON.stringify(newUsedTests));
+    
+    // Oxirgi qo'shilgan vaqtni yangilash
+    localStorage.setItem('last_test_completion', new Date().toISOString());
+    
+    renderTable();
+    updateStats();
+    updateAutoTestStats();
+    
+    alert(`${testCount} ta test muvaffaqiyatli qo'shildi!`);
+}
+
+// Avtomatik test tizimini qayta boshlash
+function resetAutoTestSystem() {
+    if (confirm('Avtomatik test tizimini qayta boshlashni xohlaysizmi? Bu barcha ishlatilgan testlar ro\'yxatini tozalaydi.')) {
+        localStorage.removeItem('used_tests');
+        localStorage.removeItem('last_test_completion');
+        localStorage.removeItem('auto_test_settings');
+        
+        // Sozlamalarni qayta yuklash
+        loadAutoTestSettings();
+        updateAutoTestStats();
+        
+        alert('Avtomatik test tizimi qayta boshlangandi!');
+    }
+}
+
 // Event Listeners
 document.addEventListener('DOMContentLoaded', function() {
     // Login holatini tekshirish
@@ -582,13 +637,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Mavjud savollarni tozalash
     cleanExistingQuestions();
     
-    // Standart savollarni ishga tushirish
-    initializeDefaultQuestions();
-    
     // Dastlabki ma'lumotlarni ko'rsatish
     updateStats();
     renderStudentsTable();
     renderTable();
+    
+    // Avtomatik test sozlamalarini yuklash
+    loadAutoTestSettings();
+    updateAutoTestStats();
     
     // Dastlabki bo'limni ko'rsatish
     showSection('students');
