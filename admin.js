@@ -26,6 +26,7 @@ function logout() {
 function showAdminPanel() {
     document.getElementById('loginScreen').classList.add('hidden');
     document.getElementById('adminContent').classList.remove('hidden');
+    initializeMobileMenu();
 }
 
 // Login ekranini ko'rsatish
@@ -33,6 +34,65 @@ function showLoginScreen() {
     document.getElementById('loginScreen').classList.remove('hidden');
     document.getElementById('adminContent').classList.add('hidden');
     document.getElementById('loginForm').reset();
+}
+
+// Mobile menu funksiyalari
+function initializeMobileMenu() {
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Mobile menu tugmalarini sozlash
+        const mobileStudentsBtn = document.getElementById('mobile-menu-students');
+        const mobileTestsBtn = document.getElementById('mobile-menu-tests');
+        const mobileLogoutBtn = document.getElementById('mobile-logoutBtn');
+        
+        if (mobileStudentsBtn) {
+            mobileStudentsBtn.addEventListener('click', () => {
+                showSection('students');
+                mobileMenu.classList.add('hidden');
+            });
+        }
+        
+        if (mobileTestsBtn) {
+            mobileTestsBtn.addEventListener('click', () => {
+                showSection('tests');
+                mobileMenu.classList.add('hidden');
+            });
+        }
+        
+        if (mobileLogoutBtn) {
+            mobileLogoutBtn.addEventListener('click', () => {
+                logout();
+                mobileMenu.classList.add('hidden');
+            });
+        }
+    }
+}
+
+// Bo'limni ko'rsatish
+function showSection(sectionName) {
+    // Barcha bo'limlarni yashirish
+    document.getElementById('students-section').classList.add('hidden');
+    document.getElementById('tests-section').classList.add('hidden');
+    
+    // Barcha menu tugmalarini inactive qilish
+    document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('active'));
+    
+    // Tanlangan bo'limni ko'rsatish
+    if (sectionName === 'students') {
+        document.getElementById('students-section').classList.remove('hidden');
+        document.getElementById('menu-students').classList.add('active');
+        document.getElementById('mobile-menu-students').classList.add('active');
+    } else if (sectionName === 'tests') {
+        document.getElementById('tests-section').classList.remove('hidden');
+        document.getElementById('menu-tests').classList.add('active');
+        document.getElementById('mobile-menu-tests').classList.add('active');
+    }
 }
 
 // LocalStorage funksiyalari
@@ -97,47 +157,79 @@ function renderStudentsTable() {
     const tbody = document.getElementById('studentsTable');
     
     if (students.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" class="py-8 text-center text-white/60">Hali o\'quvchilar ro\'yxatdan o\'tmagan</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="10" class="py-8 text-center text-white/60">Hali o\'quvchilar ro\'yxatdan o\'tmagan</td></tr>';
         return;
     }
     
     tbody.innerHTML = students.map((student, index) => {
         // O'rtacha bahoni hisoblash
-        let averageGrade = 'N/A';
-        if (student.testResults.length > 0) {
+        let averageGrade = 0;
+        if (student.testResults && student.testResults.length > 0) {
             const totalPercent = student.testResults.reduce((sum, result) => sum + result.percent, 0);
-            const avgPercent = Math.round(totalPercent / student.testResults.length);
-            averageGrade = avgPercent >= 90 ? 'A' : avgPercent >= 80 ? 'B' : avgPercent >= 70 ? 'C' : avgPercent >= 60 ? 'D' : 'F';
+            averageGrade = Math.round(totalPercent / student.testResults.length);
         }
         
         return `
-            <tr class="border-b border-white/20 hover:bg-white/10 transition-colors">
-                <td class="py-3 px-2 sm:px-4 font-bold text-sm sm:text-base" data-label="#">${index + 1}</td>
-                <td class="py-3 px-2 sm:px-4" data-label="Ism">
-                    <div class="font-semibold text-sm sm:text-base">${student.name} ${student.surname}</div>
+            <tr class="border-b border-white/10 hover:bg-white/5 transition-colors">
+                <td class="py-2 sm:py-3 px-2 sm:px-4 text-sm sm:text-base font-bold" data-label="№">${index + 1}</td>
+                <td class="py-2 sm:py-3 px-2 sm:px-4 text-sm sm:text-base font-semibold" data-label="Ism">${student.name} ${student.surname}</td>
+                <td class="py-2 sm:py-3 px-2 sm:px-4 text-sm sm:text-base hidden sm:table-cell" data-label="Telefon">${student.phone}</td>
+                <td class="py-2 sm:py-3 px-2 sm:px-4 text-sm sm:text-base hidden lg:table-cell" data-label="Email">${student.email}</td>
+                <td class="py-2 sm:py-3 px-2 sm:px-4 text-sm sm:text-base hidden lg:table-cell" data-label="Ro'yxatdan o'tgan">${student.registrationDate}</td>
+                <td class="py-2 sm:py-3 px-2 sm:px-4 text-sm sm:text-base hidden xl:table-cell" data-label="Oxirgi tashrif">${student.lastVisit}</td>
+                <td class="py-2 sm:py-3 px-2 sm:px-4 text-center text-sm sm:text-base font-semibold" data-label="Testlar">${student.testResults ? student.testResults.length : 0}</td>
+                <td class="py-2 sm:py-3 px-2 sm:px-4 text-center text-sm sm:text-base hidden sm:table-cell" data-label="O'rtacha baho">
+                    <span class="bg-gradient-to-r from-indigo-500 to-pink-500 text-white px-2 py-1 rounded-full text-xs font-bold">${averageGrade}%</span>
                 </td>
-                <td class="py-3 px-2 sm:px-4 hidden sm:table-cell" data-label="Telefon">
-                    <div class="text-sm sm:text-base">${student.phone}</div>
-                </td>
-                <td class="py-3 px-2 sm:px-4 hidden lg:table-cell" data-label="Email">
-                    <div class="text-sm sm:text-base">${student.email}</div>
-                </td>
-                <td class="py-3 px-2 sm:px-4 hidden lg:table-cell" data-label="Ro'yxatdan o'tgan">
-                    <div class="text-sm sm:text-base">${student.registrationDate}</div>
-                </td>
-                <td class="py-3 px-2 sm:px-4 hidden xl:table-cell" data-label="Oxirgi tashrif">
-                    <div class="text-sm sm:text-base">${student.lastVisit}</div>
-                </td>
-                <td class="py-3 px-2 sm:px-4 text-center font-bold text-sm sm:text-base" data-label="Testlar">${student.testResults.length}</td>
-                <td class="py-3 px-2 sm:px-4 text-center font-bold text-sm sm:text-base hidden sm:table-cell" data-label="O'rtacha baho">${averageGrade}</td>
-                <td class="py-3 px-2 sm:px-4 text-center" data-label="Batafsil">
-                    <button onclick="showStudentDetails(${student.id})" class="bg-blue-500 hover:bg-blue-600 text-white px-2 sm:px-3 py-1 rounded-lg transition-colors text-xs sm:text-sm">
+                <td class="py-2 sm:py-3 px-2 sm:px-4 text-center" data-label="Batafsil">
+                    <button onclick="showStudentDetails(${student.id})" 
+                            class="bg-gradient-to-r from-indigo-500 to-pink-500 text-white px-2 sm:px-3 py-1 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:scale-105 transition-all duration-300 shadow-lg">
                         Ko'rish
+                    </button>
+                </td>
+                <td class="py-2 sm:py-3 px-2 sm:px-4 text-center" data-label="O'chir">
+                    <button onclick="deleteStudent(${student.id})" 
+                            class="bg-red-500 text-white px-2 sm:px-3 py-1 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-red-600 transition-all duration-300 shadow-lg">
+                        O'chir
                     </button>
                 </td>
             </tr>
         `;
     }).join('');
+}
+
+// O'quvchini o'chirish
+function deleteStudent(studentId) {
+    if (confirm('Bu o\'quvchini o\'chirishni xohlaysizmi? Bu amalni qaytarib bo\'lmaydi!')) {
+        const students = getStudents();
+        const updatedStudents = students.filter(student => student.id !== studentId);
+        localStorage.setItem('students_list', JSON.stringify(updatedStudents));
+        
+        // Jadvalni yangilash
+        renderStudentsTable();
+        updateStats();
+        
+        alert('O\'quvchi muvaffaqiyatli o\'chirildi!');
+    }
+}
+
+// Barcha o'quvchilarni o'chirish
+function deleteAllStudents() {
+    const students = getStudents();
+    if (students.length === 0) {
+        alert('O\'chirish uchun o\'quvchilar mavjud emas!');
+        return;
+    }
+    
+    if (confirm(`Barcha ${students.length} ta o\'quvchini o\'chirishni xohlaysizmi? Bu amalni qaytarib bo\'lmaydi!`)) {
+        localStorage.setItem('students_list', JSON.stringify([]));
+        
+        // Jadvalni yangilash
+        renderStudentsTable();
+        updateStats();
+        
+        alert('Barcha o\'quvchilar muvaffaqiyatli o\'chirildi!');
+    }
 }
 
 // O'quvchi batafsil ma'lumotlarini ko'rsatish
@@ -150,83 +242,117 @@ function showStudentDetails(studentId) {
     const modal = document.getElementById('studentDetailsModal');
     modal.innerHTML = getStudentDetailsHTML(student);
     modal.classList.remove('hidden');
-    
-    // Modal tashqarisini bosganda yopish
-    modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
-            modal.classList.add('hidden');
-        }
-    });
 }
 
 // O'quvchi batafsil ma'lumotlari HTML
 function getStudentDetailsHTML(student) {
+    let averageGrade = 0;
+    if (student.testResults && student.testResults.length > 0) {
+        const totalPercent = student.testResults.reduce((sum, result) => sum + result.percent, 0);
+        averageGrade = Math.round(totalPercent / student.testResults.length);
+    }
+    
     return `
-        <div class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-4 sm:mb-6">
-                <h2 class="text-2xl sm:text-3xl font-bold text-white">${student.name} ${student.surname} - Profil</h2>
-                <button onclick="this.closest('.fixed').remove()" class="text-white hover:text-red-400 text-xl sm:text-2xl font-bold">
-                    ×
-                </button>
-            </div>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
-                <div class="bg-white/20 rounded-xl sm:rounded-2xl p-4 sm:p-6">
-                    <h3 class="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">Shaxsiy ma'lumotlar</h3>
-                    <div class="space-y-2 sm:space-y-3 text-white text-sm sm:text-base">
-                        <div><span class="font-semibold">Ism:</span> ${student.name}</div>
-                        <div><span class="font-semibold">Familiya:</span> ${student.surname}</div>
-                        <div><span class="font-semibold">Telefon:</span> ${student.phone}</div>
-                        <div><span class="font-semibold">Email:</span> ${student.email}</div>
-                        <div><span class="font-semibold">Ro'yxatdan o'tgan:</span> ${student.registrationDate}</div>
-                        <div><span class="font-semibold">Oxirgi tashrif:</span> ${student.lastVisit}</div>
-                    </div>
-                </div>
-                
-                <div class="bg-white/20 rounded-xl sm:rounded-2xl p-4 sm:p-6">
-                    <h3 class="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">Test statistikasi</h3>
-                    <div class="space-y-2 sm:space-y-3 text-white text-sm sm:text-base">
-                        <div><span class="font-semibold">Jami testlar:</span> ${student.testResults.length}</div>
-                        ${student.testResults.length > 0 ? `
-                            <div><span class="font-semibold">Eng yaxshi natija:</span> ${Math.max(...student.testResults.map(r => r.percent))}%</div>
-                            <div><span class="font-semibold">Eng yomon natija:</span> ${Math.min(...student.testResults.map(r => r.percent))}%</div>
-                            <div><span class="font-semibold">O'rtacha natija:</span> ${Math.round(student.testResults.reduce((sum, r) => sum + r.percent, 0) / student.testResults.length)}%</div>
-                        ` : '<div class="text-white/60">Hali test ishlanmagan</div>'}
-                    </div>
+        <div class="bg-white rounded-2xl sm:rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto mx-4">
+            <div class="bg-gradient-to-r from-indigo-500 to-pink-500 p-4 sm:p-6">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg sm:text-xl lg:text-2xl font-bold text-white">O'quvchi ma'lumotlari</h2>
+                    <button onclick="closeStudentDetails()" class="text-white hover:bg-white/20 p-2 rounded-full transition-all duration-300">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
-            
-            ${student.testResults.length > 0 ? `
-                <div class="bg-white/20 rounded-xl sm:rounded-2xl p-4 sm:p-6">
-                    <h3 class="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">Test natijalari</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full bg-white/10 rounded-lg sm:rounded-xl overflow-hidden">
-                            <thead>
-                                <tr class="bg-white/20">
-                                    <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-white font-bold text-sm sm:text-base">Sana</th>
-                                    <th class="py-2 sm:py-3 px-2 sm:px-4 text-center text-white font-bold text-sm sm:text-base">To'g'ri</th>
-                                    <th class="py-2 sm:py-3 px-2 sm:px-4 text-center text-white font-bold text-sm sm:text-base">Jami</th>
-                                    <th class="py-2 sm:py-3 px-2 sm:px-4 text-center text-white font-bold text-sm sm:text-base">Foiz</th>
-                                    <th class="py-2 sm:py-3 px-2 sm:px-4 text-center text-white font-bold text-sm sm:text-base">Baho</th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-white text-sm sm:text-base">
-                                ${student.testResults.map(result => `
-                                    <tr class="border-b border-white/10">
-                                        <td class="py-2 px-2 sm:px-4">${result.date}</td>
-                                        <td class="py-2 px-2 sm:px-4 text-center">${result.correct}</td>
-                                        <td class="py-2 px-2 sm:px-4 text-center">${result.total}</td>
-                                        <td class="py-2 px-2 sm:px-4 text-center font-bold">${result.percent}%</td>
-                                        <td class="py-2 px-2 sm:px-4 text-center font-bold">${result.grade}</td>
-                                    </tr>
+            <div class="p-4 sm:p-6">
+                <div class="space-y-4 sm:space-y-6">
+                    <div class="text-center">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-indigo-500 to-pink-500 rounded-full mx-auto mb-3 sm:mb-4 flex items-center justify-center text-xl sm:text-2xl lg:text-3xl font-bold text-white">
+                            ${student.name.charAt(0)}${student.surname.charAt(0)}
+                        </div>
+                        <h3 class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 mb-1 sm:mb-2">${student.name} ${student.surname}</h3>
+                        <p class="text-gray-600 text-sm sm:text-base">O'quvchi</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 lg:gap-6">
+                        <div class="bg-gray-50 rounded-xl p-3 sm:p-4">
+                            <div class="flex items-center gap-2 sm:gap-3 mb-2">
+                                <span class="text-lg sm:text-xl">📱</span>
+                                <span class="text-gray-700 font-semibold text-sm sm:text-base">Telefon:</span>
+                            </div>
+                            <p class="text-gray-600 ml-7 sm:ml-8 text-sm sm:text-base break-all">${student.phone}</p>
+                        </div>
+                        
+                        <div class="bg-gray-50 rounded-xl p-3 sm:p-4">
+                            <div class="flex items-center gap-2 sm:gap-3 mb-2">
+                                <span class="text-lg sm:text-xl">📧</span>
+                                <span class="text-gray-700 font-semibold text-sm sm:text-base">Email:</span>
+                            </div>
+                            <p class="text-gray-600 ml-7 sm:ml-8 text-sm sm:text-base break-all">${student.email}</p>
+                        </div>
+                        
+                        <div class="bg-gray-50 rounded-xl p-3 sm:p-4">
+                            <div class="flex items-center gap-2 sm:gap-3 mb-2">
+                                <span class="text-lg sm:text-xl">📅</span>
+                                <span class="text-gray-700 font-semibold text-sm sm:text-base">Ro'yxatdan o'tgan:</span>
+                            </div>
+                            <p class="text-gray-600 ml-7 sm:ml-8 text-sm sm:text-base">${student.registrationDate}</p>
+                        </div>
+                        
+                        <div class="bg-gray-50 rounded-xl p-3 sm:p-4">
+                            <div class="flex items-center gap-2 sm:gap-3 mb-2">
+                                <span class="text-lg sm:text-xl">📊</span>
+                                <span class="text-gray-700 font-semibold text-sm sm:text-base">O'rtacha baho:</span>
+                            </div>
+                            <p class="text-gray-600 ml-7 sm:ml-8 text-sm sm:text-base">
+                                <span class="bg-gradient-to-r from-indigo-500 to-pink-500 text-white px-2 py-1 rounded-full text-xs font-bold">${averageGrade}%</span>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    ${student.testResults && student.testResults.length > 0 ? `
+                        <div class="bg-gray-50 rounded-xl p-3 sm:p-4">
+                            <h4 class="text-base sm:text-lg font-bold text-gray-800 mb-3">Test natijalari tarixi:</h4>
+                            <div class="space-y-2 max-h-48 sm:max-h-60 overflow-y-auto">
+                                ${student.testResults.map((result, index) => `
+                                    <div class="bg-white rounded-lg p-2 sm:p-3 border border-gray-200">
+                                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-1 gap-1">
+                                            <span class="text-sm font-semibold text-gray-700">Test ${index + 1}</span>
+                                            <span class="text-xs sm:text-sm text-gray-500">${result.date}</span>
+                                        </div>
+                                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                                            <span class="text-xs text-gray-600">${result.correct}/${result.total} to'g'ri</span>
+                                            <span class="text-sm font-bold ${result.percent >= 80 ? 'text-green-600' : result.percent >= 60 ? 'text-yellow-600' : 'text-red-600'}">${result.percent}%</span>
+                                            <span class="text-xs font-bold bg-gray-200 px-2 py-1 rounded">${result.grade}</span>
+                                        </div>
+                                    </div>
                                 `).join('')}
-                            </tbody>
-                        </table>
+                            </div>
+                        </div>
+                    ` : `
+                        <div class="bg-gray-50 rounded-xl p-3 sm:p-4">
+                            <div class="text-center">
+                                <div class="text-3xl sm:text-4xl mb-2">📝</div>
+                                <p class="text-gray-600 text-sm sm:text-base">Hali test ishlanmagan</p>
+                                <p class="text-gray-500 text-xs sm:text-sm mt-1">Test ishlaganingizdan so'ng natijalar bu yerda ko'rinadi</p>
+                            </div>
+                        </div>
+                    `}
+                    
+                    <div class="pt-2 sm:pt-4">
+                        <button onclick="closeStudentDetails()" class="w-full bg-gradient-to-r from-indigo-500 to-pink-500 text-white py-2 sm:py-3 rounded-xl font-semibold hover:scale-105 transition-all duration-300 text-sm sm:text-base shadow-lg">
+                            Yopish
+                        </button>
                     </div>
                 </div>
-            ` : ''}
+            </div>
         </div>
     `;
+}
+
+// O'quvchi batafsil ma'lumotlarini yashirish
+function closeStudentDetails() {
+    document.getElementById('studentDetailsModal').classList.add('hidden');
 }
 
 // Savollar jadvalini ko'rsatish
@@ -239,25 +365,20 @@ function renderTable() {
         return;
     }
     
-    tbody.innerHTML = questions.map((q, index) => `
-        <tr class="border-b border-white/20 hover:bg-white/10 transition-colors">
-            <td class="py-3 px-2 sm:px-4 font-bold text-sm sm:text-base" data-label="#">${index + 1}</td>
-            <td class="py-3 px-2 sm:px-4" data-label="Savol">
-                <div class="text-sm sm:text-base max-w-xs sm:max-w-md lg:max-w-lg truncate" title="${q.text}">${q.text}</div>
+    tbody.innerHTML = questions.map((question, index) => `
+        <tr class="border-b border-white/10 hover:bg-white/5 transition-colors">
+            <td class="py-2 sm:py-3 px-2 sm:px-4 text-sm sm:text-base" data-label="№">${index + 1}</td>
+            <td class="py-2 sm:py-3 px-2 sm:px-4 text-sm sm:text-base" data-label="Savol">${question.text.length > 100 ? question.text.substring(0, 100) + '...' : question.text}</td>
+            <td class="py-2 sm:py-3 px-2 sm:px-4 text-sm sm:text-base hidden sm:table-cell" data-label="A">${question.options[0].length > 30 ? question.options[0].substring(0, 30) + '...' : question.options[0]}</td>
+            <td class="py-2 sm:py-3 px-2 sm:px-4 text-sm sm:text-base hidden sm:table-cell" data-label="B">${question.options[1].length > 30 ? question.options[1].substring(0, 30) + '...' : question.options[1]}</td>
+            <td class="py-2 sm:py-3 px-2 sm:px-4 text-sm sm:text-base hidden sm:table-cell" data-label="C">${question.options[2].length > 30 ? question.options[2].substring(0, 30) + '...' : question.options[2]}</td>
+            <td class="py-2 sm:py-3 px-2 sm:px-4 text-center text-sm sm:text-base" data-label="To'g'ri">
+                <span class="bg-green-500 text-white px-2 py-1 rounded text-xs sm:text-sm font-bold">${String.fromCharCode(65 + question.answer)}</span>
             </td>
-            <td class="py-3 px-2 sm:px-4 hidden sm:table-cell" data-label="A">
-                <div class="text-sm sm:text-base max-w-20 sm:max-w-24 truncate" title="${q.options[0]}">${q.options[0]}</div>
-            </td>
-            <td class="py-3 px-2 sm:px-4 hidden sm:table-cell" data-label="B">
-                <div class="text-sm sm:text-base max-w-20 sm:max-w-24 truncate" title="${q.options[1]}">${q.options[1]}</div>
-            </td>
-            <td class="py-3 px-2 sm:px-4 hidden sm:table-cell" data-label="C">
-                <div class="text-sm sm:text-base max-w-20 sm:max-w-24 truncate" title="${q.options[2]}">${q.options[2]}</div>
-            </td>
-            <td class="py-3 px-2 sm:px-4 text-center font-bold text-sm sm:text-base" data-label="To'g'ri">${String.fromCharCode(65 + q.answer)}</td>
-            <td class="py-3 px-2 sm:px-4 text-center" data-label="O'chirish">
-                <button onclick="deleteQuestion(${index})" class="bg-red-500 hover:bg-red-600 text-white px-2 sm:px-3 py-1 rounded-lg transition-colors text-xs sm:text-sm">
-                    O'chirish
+            <td class="py-2 sm:py-3 px-2 sm:px-4 text-center" data-label="O'chir">
+                <button onclick="deleteQuestion(${index})" 
+                        class="bg-red-500 text-white px-2 sm:px-3 py-1 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-red-600 transition-all duration-300">
+                    O'chir
                 </button>
             </td>
         </tr>
@@ -275,6 +396,49 @@ function deleteQuestion(index) {
     }
 }
 
+// Savol qo'shish
+function addQuestion(questionData) {
+    const questions = getQuestions();
+    questions.push(questionData);
+    setQuestions(questions);
+    renderTable();
+    updateStats();
+}
+
+// Import funksiyasi
+function importQuestions(file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const importedQuestions = JSON.parse(e.target.result);
+            const currentQuestions = getQuestions();
+            
+            // Yangi savollarni qo'shish
+            const updatedQuestions = [...currentQuestions, ...importedQuestions];
+            setQuestions(updatedQuestions);
+            
+            renderTable();
+            updateStats();
+            alert(`${importedQuestions.length} ta savol muvaffaqiyatli qo'shildi!`);
+        } catch (error) {
+            alert('Fayl formatida xatolik! Iltimos, to\'g\'ri JSON faylini tanlang.');
+        }
+    };
+    reader.readAsText(file);
+}
+
+// Export funksiyasi
+function exportQuestions() {
+    const questions = getQuestions();
+    const dataStr = JSON.stringify(questions, null, 2);
+    const dataBlob = new Blob([dataStr], {type: 'application/json'});
+    
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(dataBlob);
+    link.download = 'reading_questions.json';
+    link.click();
+}
+
 // Event Listeners
 document.addEventListener('DOMContentLoaded', function() {
     // Login holatini tekshirish
@@ -285,82 +449,93 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Login form
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const password = document.getElementById('adminPassword').value;
-        
-        if (login(password)) {
-            alert('Muvaffaqiyatli kirdingiz!');
-        } else {
-            alert('Noto\'g\'ri parol!');
-            document.getElementById('adminPassword').value = '';
-            document.getElementById('adminPassword').focus();
-        }
-    });
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const password = document.getElementById('adminPassword').value;
+            if (!login(password)) {
+                alert('Noto\'g\'ri parol!');
+            }
+        });
+    }
     
-    // Logout tugmasi
-    document.getElementById('logoutBtn').addEventListener('click', function() {
-        logout();
-    });
+    // Menu tugmalari
+    const studentsBtn = document.getElementById('menu-students');
+    const testsBtn = document.getElementById('menu-tests');
+    const logoutBtn = document.getElementById('logoutBtn');
     
-    // Mavjud savollardan "Read the passage:" ni olib tashlash
+    if (studentsBtn) {
+        studentsBtn.addEventListener('click', () => showSection('students'));
+    }
+    
+    if (testsBtn) {
+        testsBtn.addEventListener('click', () => showSection('tests'));
+    }
+    
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', logout);
+    }
+    
+    // Savol qo'shish formasi
+    const addForm = document.getElementById('addForm');
+    if (addForm) {
+        addForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const questionData = {
+                text: document.getElementById('qText').value.trim(),
+                options: [
+                    document.getElementById('optA').value.trim(),
+                    document.getElementById('optB').value.trim(),
+                    document.getElementById('optC').value.trim()
+                ],
+                answer: parseInt(document.getElementById('qAnswer').value)
+            };
+            
+            if (!questionData.text || !questionData.options[0] || !questionData.options[1] || !questionData.options[2] || questionData.answer === undefined) {
+                alert('Barcha maydonlarni to\'ldiring!');
+                return;
+            }
+            
+            addQuestion(questionData);
+            addForm.reset();
+        });
+    }
+    
+    // Import fayl input
+    const importInput = document.getElementById('importInput');
+    if (importInput) {
+        importInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                importQuestions(file);
+                e.target.value = ''; // Input ni tozalash
+            }
+        });
+    }
+    
+    // Export tugmasi
+    const exportBtn = document.getElementById('exportBtn');
+    if (exportBtn) {
+        exportBtn.addEventListener('click', exportQuestions);
+    }
+    
+    // Mavjud savollarni tozalash
     cleanExistingQuestions();
     
-    // Yangi savol qo'shish
-    document.getElementById('addForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        let text = document.getElementById('qText').value.trim();
-        const optA = document.getElementById('optA').value.trim();
-        const optB = document.getElementById('optB').value.trim();
-        const optC = document.getElementById('optC').value.trim();
-        const answer = parseInt(document.getElementById('qAnswer').value);
-        
-        if (!text || !optA || !optB || !optC) {
-            alert('Barcha maydonlarni to\'ldiring!');
-            return;
-        }
-        
-        // "Read the passage:" ni olib tashlash
-        text = text.replace(/^Read the passage:\s*/i, '');
-        
-        const questions = getQuestions();
-        questions.push({
-            text: text,
-            options: [optA, optB, optC],
-            answer: answer
-        });
-        
-        setQuestions(questions);
-        this.reset();
-        renderTable();
-        updateStats();
-        
-        alert('Savol muvaffaqiyatli qo\'shildi!');
-    });
-
-    // Menu tugmalari
-    document.getElementById('menu-students').addEventListener('click', function() {
-        document.getElementById('students-section').classList.remove('hidden');
-        document.getElementById('tests-section').classList.add('hidden');
-        
-        document.getElementById('menu-students').classList.add('active');
-        document.getElementById('menu-tests').classList.remove('active');
-        
-        renderStudentsTable();
-    });
-    
-    document.getElementById('menu-tests').addEventListener('click', function() {
-        document.getElementById('students-section').classList.add('hidden');
-        document.getElementById('tests-section').classList.remove('hidden');
-        
-        document.getElementById('menu-students').classList.remove('active');
-        document.getElementById('menu-tests').classList.add('active');
-    });
-
-    // Sahifa yuklanganda
+    // Dastlabki ma'lumotlarni ko'rsatish
     updateStats();
-    renderTable();
     renderStudentsTable();
+    renderTable();
+    
+    // Dastlabki bo'limni ko'rsatish
+    showSection('students');
+});
+
+// Global event listener - modal yashirish
+document.addEventListener('click', function(e) {
+    if (e.target.id === 'studentDetailsModal') {
+        closeStudentDetails();
+    }
 });

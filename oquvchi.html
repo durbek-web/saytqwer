@@ -43,8 +43,44 @@
             transition: width 0.5s ease;
         }
         
+        /* Flex responsive styles */
+        .flex-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .flex-header {
+            flex-shrink: 0;
+        }
+        
+        .flex-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem
+        }
+        
+        .flex-content {
+            width: 100%;
+            max-width: 45rem;
+            margin: 0 auto;
+        }
+        
         /* Mobile responsive styles */
         @media (max-width: 768px) {
+            .flex-main {
+                padding: 0.5rem;
+                justify-content: flex-start;
+                padding-top: 2rem;
+            }
+            
+            .flex-content {
+                max-width: 100%;
+            }
+            
             .mobile-text-lg { font-size: 1.125rem; }
             .mobile-text-xl { font-size: 1.25rem; }
             .mobile-text-2xl { font-size: 1.5rem; }
@@ -57,44 +93,68 @@
             .mobile-gap-4 { gap: 1rem; }
             .mobile-gap-6 { gap: 1.5rem; }
         }
+        
+        /* Tablet responsive styles */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .flex-main {
+                padding: 1.5rem;
+            }
+            
+            .flex-content {
+                max-width: 48rem;
+            }
+        }
+        
+        /* Desktop responsive styles */
+        @media (min-width: 1025px) {
+            .flex-main {
+                padding: 2rem;
+            }
+            
+            .flex-content {
+                max-width: 56rem;
+            }
+        }
     </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
-    <!-- Header -->
-    <header class="w-full fixed top-0 left-0 z-50 bg-gradient-to-r from-indigo-500/80 to-pink-400/80 shadow-2xl backdrop-blur-md py-3 sm:py-4">
-        <div class="max-w-4xl mx-auto flex items-center justify-between px-4 sm:px-8">
-            <span class="text-lg sm:text-2xl font-extrabold text-white tracking-wide drop-shadow">Reading Test</span>
-            <div class="flex items-center gap-3 sm:gap-6">
-                <div class="text-white font-semibold text-sm sm:text-base">
-                    <span id="progress-text">0%</span> bajarildi
+<body class="bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
+    <div class="flex-container">
+        <!-- Header -->
+        <header class="flex-header w-full fixed top-0 left-0 z-50 bg-gradient-to-r from-indigo-500/80 to-pink-400/80 shadow-2xl backdrop-blur-md py-3 sm:py-4">
+            <div class="max-w-4xl mx-auto flex items-center justify-between px-4 sm:px-8">
+                <span class="text-lg sm:text-2xl font-extrabold text-white tracking-wide drop-shadow">Reading Test</span>
+                <div class="flex items-center gap-3 sm:gap-6">
+                    <div class="text-white font-semibold text-sm sm:text-base">
+                        <span id="progress-text">0%</span> bajarildi
+                    </div>
+                    <button onclick="showQuestionsModal()" class="relative p-2 text-white hover:bg-white/20 rounded-full transition-all duration-300">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+                        </svg>
+                        <span id="notification-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">0</span>
+                    </button>
+                    <button onclick="showProfileModal()" class="relative p-2 text-white hover:bg-white/20 rounded-full transition-all duration-300">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                        </svg>
+                    </button>
                 </div>
-                <button onclick="showQuestionsModal()" class="relative p-2 text-white hover:bg-white/20 rounded-full transition-all duration-300">
-                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
-                    </svg>
-                    <span id="notification-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">0</span>
-                </button>
-                <button onclick="showProfileModal()" class="relative p-2 text-white hover:bg-white/20 rounded-full transition-all duration-300">
-                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
-                    </svg>
-                </button>
             </div>
+        </header>
+
+        <!-- Progress Bar -->
+        <div class="flex-header fixed top-16 sm:top-20 left-0 w-full bg-white/20 h-1 z-40">
+            <div id="progress-bar" class="progress-bar h-full bg-gradient-to-r from-indigo-500 to-pink-500 rounded-r-full" style="width: 0%"></div>
         </div>
-    </header>
 
-    <!-- Progress Bar -->
-    <div class="fixed top-16 sm:top-20 left-0 w-full bg-white/20 h-1 z-40">
-        <div id="progress-bar" class="progress-bar h-full bg-gradient-to-r from-indigo-500 to-pink-500 rounded-r-full" style="width: 0%"></div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="pt-24 sm:pt-32 pb-4 sm:pb-8 px-4 sm:px-8">
-        <div class="max-w-4xl mx-auto">
-            <div id="app" class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl fade-in">
-                <!-- Content will be dynamically loaded here -->
+        <!-- Main Content -->
+        <main class="flex-main pt-20 sm:pt-24">
+            <div class="flex-content">
+                <div id="app" class="glass-card rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 shadow-2xl fade-in">
+                    <!-- Content will be dynamically loaded here -->
+                </div>
             </div>
-        </div>
+        </main>
     </div>
 
     <!-- Questions Modal -->

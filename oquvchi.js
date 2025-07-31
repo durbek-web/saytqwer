@@ -243,41 +243,41 @@ function showRegistration() {
 // Ro'yxatdan o'tish HTML
 function getRegistrationHTML() {
     return `
-        <div class="scale-in">
-            <div class="text-center mb-6 sm:mb-8">
-                <div class="text-6xl sm:text-6xl mb-4">👋</div>
-                <h1 class="text-3xl sm:text-4xl font-bold text-white mb-3 sm:mb-4">Xush kelibsiz!</h1>
+        <div class="scale-in flex flex-col justify-center min-h-full">
+            <div class="text-center mb-4 sm:mb-6">
+                <div class="text-4xl sm:text-5xl lg:text-6xl mb-3 sm:mb-4">👋</div>
+                <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2 sm:mb-3">Xush kelibsiz!</h1>
                 <p class="text-white/80 text-base sm:text-lg">Test ishlash uchun ro'yxatdan o'ting</p>
             </div>
             
-            <form id="registrationForm" class="space-y-4 sm:space-y-6">
+            <form id="registrationForm" class="space-y-3 sm:space-y-4">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div>
-                        <label class="block text-white font-semibold mb-2 text-sm sm:text-base">Ism:</label>
+                        <label class="block text-white font-semibold mb-2 text-base sm:text-lg">Ism:</label>
                         <input type="text" id="studentName" required placeholder="Ismingizni kiriting..." 
-                               class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-xl border-2 border-white/30 bg-white/20 text-white placeholder-white/60 focus:border-white focus:outline-none transition-all duration-300 text-sm sm:text-base">
+                               class="w-full px-4 sm:px-5 py-3 sm:py-4 rounded-xl border-2 border-white/30 bg-white/20 text-white placeholder-white/60 focus:border-white focus:outline-none transition-all duration-300 text-base sm:text-lg">
                     </div>
                     <div>
-                        <label class="block text-white font-semibold mb-2 text-sm sm:text-base">Familiya:</label>
+                        <label class="block text-white font-semibold mb-2 text-base sm:text-lg">Familiya:</label>
                         <input type="text" id="studentSurname" required placeholder="Familiyangizni kiriting..." 
-                               class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-xl border-2 border-white/30 bg-white/20 text-white placeholder-white/60 focus:border-white focus:outline-none transition-all duration-300 text-sm sm:text-base">
+                               class="w-full px-4 sm:px-5 py-3 sm:py-4 rounded-xl border-2 border-white/30 bg-white/20 text-white placeholder-white/60 focus:border-white focus:outline-none transition-all duration-300 text-base sm:text-lg">
                     </div>
                 </div>
                 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div>
-                        <label class="block text-white font-semibold mb-2 text-sm sm:text-base">Telefon raqam:</label>
+                        <label class="block text-white font-semibold mb-2 text-base sm:text-lg">Telefon raqam:</label>
                         <input type="tel" id="studentPhone" required placeholder="+998 XX XXX XX XX" 
-                               class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-xl border-2 border-white/30 bg-white/20 text-white placeholder-white/60 focus:border-white focus:outline-none transition-all duration-300 text-sm sm:text-base">
+                               class="w-full px-4 sm:px-5 py-3 sm:py-4 rounded-xl border-2 border-white/30 bg-white/20 text-white placeholder-white/60 focus:border-white focus:outline-none transition-all duration-300 text-base sm:text-lg">
                     </div>
                     <div>
-                        <label class="block text-white font-semibold mb-2 text-sm sm:text-base">Email:</label>
+                        <label class="block text-white font-semibold mb-2 text-base sm:text-lg">Email:</label>
                         <input type="email" id="studentEmail" required placeholder="email@example.com" 
-                               class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-xl border-2 border-white/30 bg-white/20 text-white placeholder-white/60 focus:border-white focus:outline-none transition-all duration-300 text-sm sm:text-base">
+                               class="w-full px-4 sm:px-5 py-3 sm:py-4 rounded-xl border-2 border-white/30 bg-white/20 text-white placeholder-white/60 focus:border-white focus:outline-none transition-all duration-300 text-base sm:text-lg">
                     </div>
                 </div>
                 
-                <button type="submit" class="w-full bg-gradient-to-r from-indigo-500 to-pink-500 text-white py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg shadow-lg hover:scale-105 active:scale-95 transition-all duration-300">
+                <button type="submit" class="w-full bg-gradient-to-r from-indigo-500 to-pink-500 text-white py-4 sm:py-5 rounded-xl sm:rounded-2xl font-bold text-lg sm:text-xl shadow-lg hover:scale-105 active:scale-95 transition-all duration-300 mt-3">
                     Ro'yxatdan o'tish va testni boshlash
                 </button>
             </form>
@@ -320,52 +320,52 @@ function showProfile() {
 // Profil HTML
 function getProfileHTML() {
     return `
-        <div class="scale-in">
-            <div class="text-center mb-6 sm:mb-8">
-                <div class="text-6xl sm:text-8xl mb-4 sm:mb-6">👤</div>
-                <h1 class="text-3xl sm:text-4xl font-bold text-white mb-3 sm:mb-4">Profil yaratildi!</h1>
-                <p class="text-white/80 text-base sm:text-lg">Xush kelibsiz, ${currentStudent.name} ${currentStudent.surname}!</p>
+        <div class="scale-in flex flex-col justify-center min-h-full">
+            <div class="text-center mb-3 sm:mb-4">
+                <div class="text-3xl sm:text-4xl lg:text-5xl mb-2 sm:mb-3">👤</div>
+                <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-1 sm:mb-2">Profil yaratildi!</h1>
+                <p class="text-white/80 text-sm sm:text-base">Xush kelibsiz, ${currentStudent.name} ${currentStudent.surname}!</p>
             </div>
             
-            <div class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+            <div class="glass-card rounded-2xl sm:rounded-3xl p-3 sm:p-4 lg:p-6 mb-3 sm:mb-4">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 lg:gap-6">
                     <div class="text-center">
-                        <div class="w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-br from-indigo-500 to-pink-500 rounded-full mx-auto mb-4 flex items-center justify-center text-2xl sm:text-4xl font-bold text-white">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-indigo-500 to-pink-500 rounded-full mx-auto mb-2 sm:mb-3 flex items-center justify-center text-lg sm:text-xl lg:text-2xl font-bold text-white">
                             ${currentStudent.name.charAt(0)}${currentStudent.surname.charAt(0)}
                         </div>
-                        <h2 class="text-xl sm:text-2xl font-bold text-white mb-2">${currentStudent.name} ${currentStudent.surname}</h2>
+                        <h2 class="text-base sm:text-lg lg:text-xl font-bold text-white mb-1">${currentStudent.name} ${currentStudent.surname}</h2>
                         <p class="text-white/70 text-sm sm:text-base">O'quvchi</p>
                     </div>
                     
-                    <div class="space-y-3 sm:space-y-4">
-                        <div class="bg-white/20 rounded-xl sm:rounded-2xl p-3 sm:p-4">
-                            <div class="flex items-center gap-2 sm:gap-3 mb-2">
-                                <span class="text-xl sm:text-2xl">📱</span>
+                    <div class="space-y-2 sm:space-y-3">
+                        <div class="bg-white/20 rounded-xl sm:rounded-2xl p-2 sm:p-3">
+                            <div class="flex items-center gap-2 sm:gap-3 mb-1">
+                                <span class="text-base sm:text-lg lg:text-xl">📱</span>
                                 <span class="text-white font-semibold text-sm sm:text-base">Telefon:</span>
                             </div>
-                            <p class="text-white/80 ml-8 sm:ml-11 text-sm sm:text-base">${currentStudent.phone}</p>
+                            <p class="text-white/80 ml-5 sm:ml-6 lg:ml-8 text-sm sm:text-base break-all">${currentStudent.phone}</p>
                         </div>
                         
-                        <div class="bg-white/20 rounded-xl sm:rounded-2xl p-3 sm:p-4">
-                            <div class="flex items-center gap-2 sm:gap-3 mb-2">
-                                <span class="text-xl sm:text-2xl">📧</span>
+                        <div class="bg-white/20 rounded-xl sm:rounded-2xl p-2 sm:p-3">
+                            <div class="flex items-center gap-2 sm:gap-3 mb-1">
+                                <span class="text-base sm:text-lg lg:text-xl">📧</span>
                                 <span class="text-white font-semibold text-sm sm:text-base">Email:</span>
                             </div>
-                            <p class="text-white/80 ml-8 sm:ml-11 text-sm sm:text-base">${currentStudent.email}</p>
+                            <p class="text-white/80 ml-5 sm:ml-6 lg:ml-8 text-sm sm:text-base break-all">${currentStudent.email}</p>
                         </div>
                         
-                        <div class="bg-white/20 rounded-xl sm:rounded-2xl p-3 sm:p-4">
-                            <div class="flex items-center gap-2 sm:gap-3 mb-2">
-                                <span class="text-xl sm:text-2xl">📅</span>
+                        <div class="bg-white/20 rounded-xl sm:rounded-2xl p-2 sm:p-3">
+                            <div class="flex items-center gap-2 sm:gap-3 mb-1">
+                                <span class="text-base sm:text-lg lg:text-xl">📅</span>
                                 <span class="text-white font-semibold text-sm sm:text-base">Ro'yxatdan o'tgan:</span>
                             </div>
-                            <p class="text-white/80 ml-8 sm:ml-11 text-sm sm:text-base">${currentStudent.registrationDate}</p>
+                            <p class="text-white/80 ml-5 sm:ml-6 lg:ml-8 text-sm sm:text-base">${currentStudent.registrationDate}</p>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <div class="text-center space-y-3 sm:space-y-4">
+            <div class="text-center space-y-2 sm:space-y-3">
                 <button onclick="startTest()" class="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg hover:scale-105 transition-all duration-300">
                     🚀 Testni boshlash
                 </button>
@@ -418,6 +418,9 @@ function getQuestionHTML() {
     const question = questions[current];
     const questionNumber = current + 1;
     
+    // Matnni qisqartirish (dastlabki 150 belgi)
+    const shortText = question.text.length > 150 ? question.text.substring(0, 150) + '...' : question.text;
+    
     return `
         <div class="scale-in">
             <!-- O'quvchi ma'lumotlari -->
@@ -443,7 +446,16 @@ function getQuestionHTML() {
 
             <!-- Savol matni -->
             <div class="bg-white/20 rounded-xl sm:rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8">
-                <h2 class="text-xl sm:text-2xl font-bold text-white leading-relaxed">${question.text}</h2>
+                <div id="questionText-${current}" class="mb-4">
+                    <p class="text-lg sm:text-xl font-semibold text-white leading-relaxed">${shortText}</p>
+                </div>
+                
+                ${question.text.length > 150 ? `
+                    <button onclick="showFullText(${current})" 
+                            class="bg-gradient-to-r from-indigo-500 to-pink-500 text-white px-4 py-2 rounded-lg font-semibold hover:scale-105 transition-all duration-300 text-sm sm:text-base">
+                        📖 Reading
+                    </button>
+                ` : ''}
             </div>
 
             <!-- Javob variantlari -->
@@ -488,6 +500,47 @@ function getQuestionHTML() {
             </div>
         </div>
     `;
+}
+
+// To'liq matnni ko'rsatish funksiyasi
+function showFullText(questionIndex) {
+    const question = questions[questionIndex];
+    const textContainer = document.getElementById(`questionText-${questionIndex}`);
+    
+    if (textContainer) {
+        textContainer.innerHTML = `
+            <p class="text-lg sm:text-xl font-semibold text-white leading-relaxed">${question.text}</p>
+        `;
+        
+        // Reading tugmasini Hide tugmasiga o'zgartirish
+        const button = textContainer.nextElementSibling;
+        if (button && button.tagName === 'BUTTON') {
+            button.innerHTML = '📖 Hide';
+            button.onclick = () => hideFullText(questionIndex);
+        }
+    }
+}
+
+// Matnni yashirish funksiyasi
+function hideFullText(questionIndex) {
+    const question = questions[questionIndex];
+    const textContainer = document.getElementById(`questionText-${questionIndex}`);
+    
+    if (textContainer) {
+        // Matnni qisqartirish
+        const shortText = question.text.length > 150 ? question.text.substring(0, 150) + '...' : question.text;
+        
+        textContainer.innerHTML = `
+            <p class="text-lg sm:text-xl font-semibold text-white leading-relaxed">${shortText}</p>
+        `;
+        
+        // Hide tugmasini Reading tugmasiga qaytarish
+        const button = textContainer.nextElementSibling;
+        if (button && button.tagName === 'BUTTON') {
+            button.innerHTML = '📖 Reading';
+            button.onclick = () => showFullText(questionIndex);
+        }
+    }
 }
 
 // Javob tanlash
@@ -717,4 +770,4 @@ document.addEventListener('keydown', function(e) {
             }
             break;
     }
-}); 
+});

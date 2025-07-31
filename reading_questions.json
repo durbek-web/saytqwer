@@ -1,0 +1,102 @@
+[
+  {
+    "text": "The quantum entanglement phenomenon, first theorized by Einstein as 'spooky action at a distance,' describes how two or more particles can become correlated in such a way that the quantum state of each particle cannot be described independently. This principle has profound implications for quantum computing and cryptography. What is the primary characteristic of quantum entanglement?",
+    "options": [
+      "Particles must be physically connected",
+      "Particles can influence each other instantaneously regardless of distance",
+      "Particles can only be entangled if they are the same type",
+      "Entanglement only occurs in laboratory conditions"
+    ],
+    "answer": 1
+  },
+  {
+    "text": "The Great Depression, which lasted from 1929 to 1939, was the longest and most severe economic downturn in modern history. It began with the stock market crash of October 1929 and affected nearly every country in the world. The unemployment rate in the United States reached 25%, and international trade fell by more than 50%. What was the primary trigger of the Great Depression?",
+    "options": [
+      "World War I reparations",
+      "The stock market crash of 1929",
+      "The Dust Bowl agricultural crisis",
+      "The Federal Reserve's monetary policy"
+    ],
+    "answer": 1
+  },
+  {
+    "text": "Climate change refers to long-term shifts in global weather patterns and average temperatures. The primary driver of recent climate change is the increase in greenhouse gases, particularly carbon dioxide, in Earth's atmosphere. These gases trap heat from the sun, creating a 'greenhouse effect' that warms the planet. What is the main cause of the current climate change crisis?",
+    "options": [
+      "Natural variations in Earth's orbit",
+      "Increased solar activity",
+      "Human activities releasing greenhouse gases",
+      "Volcanic eruptions"
+    ],
+    "answer": 2
+  },
+  {
+    "text": "Artificial Intelligence (AI) encompasses a broad range of technologies that enable machines to perform tasks that typically require human intelligence. Machine learning, a subset of AI, allows computers to learn and improve from experience without being explicitly programmed. Deep learning, which uses neural networks with multiple layers, has revolutionized fields like image recognition and natural language processing. What distinguishes machine learning from traditional programming?",
+    "options": [
+      "It requires more powerful computers",
+      "It can learn and improve from experience",
+      "It only works with numerical data",
+      "It requires human supervision at all times"
+    ],
+    "answer": 1
+  },
+  {
+    "text": "The human brain contains approximately 86 billion neurons, each connected to thousands of other neurons through synapses. This complex network enables consciousness, memory, learning, and all cognitive functions. Neuroplasticity, the brain's ability to form new neural connections throughout life, is crucial for learning and recovery from injury. What is the estimated number of neurons in the human brain?",
+    "options": [
+      "100 billion",
+      "86 billion",
+      "50 billion",
+      "200 billion"
+    ],
+    "answer": 1
+  },
+  {
+    "text": "The theory of relativity, developed by Albert Einstein, consists of two parts: special relativity and general relativity. Special relativity deals with the relationship between space and time, while general relativity explains gravity as a curvature of spacetime caused by mass and energy. This theory has been confirmed by numerous experiments and observations. What does general relativity primarily explain?",
+    "options": [
+      "The speed of light",
+      "Gravity as spacetime curvature",
+      "Nuclear reactions",
+      "Electromagnetic forces"
+    ],
+    "answer": 1
+  },
+  {
+    "text": "The Industrial Revolution, which began in Britain in the late 18th century, marked a transition from manual labor to machine-based manufacturing. This period saw the development of steam power, the growth of factories, and significant social and economic changes. The revolution spread to other countries and fundamentally transformed society. When did the Industrial Revolution begin?",
+    "options": [
+      "Early 17th century",
+      "Late 18th century",
+      "Early 19th century",
+      "Mid 20th century"
+    ],
+    "answer": 1
+  },
+  {
+    "text": "DNA (deoxyribonucleic acid) is the molecule that carries genetic information in all living organisms. It consists of two strands that form a double helix structure, with each strand containing a sequence of four nucleotide bases: adenine (A), thymine (T), cytosine (C), and guanine (G). The sequence of these bases determines the genetic code. What is the structure of DNA?",
+    "options": [
+      "Single helix",
+      "Double helix",
+      "Triple helix",
+      "Circular structure"
+    ],
+    "answer": 1
+  },
+  {
+    "text": "The Internet, originally developed as ARPANET by the U.S. Department of Defense, has evolved into a global network connecting billions of devices. It operates on a system of protocols, primarily TCP/IP, which enables data transmission between computers worldwide. The World Wide Web, created by Tim Berners-Lee, is a system of interlinked hypertext documents accessible via the Internet. What was the original name of the Internet?",
+    "options": [
+      "World Wide Web",
+      "ARPANET",
+      "TCP/IP Network",
+      "Global Network"
+    ],
+    "answer": 1
+  },
+  {
+    "text": "The Big Bang theory is the prevailing cosmological model explaining the origin of the universe. According to this theory, the universe began approximately 13.8 billion years ago from an extremely hot and dense state and has been expanding ever since. Evidence supporting this theory includes cosmic microwave background radiation and the observed expansion of galaxies. How old is the universe according to the Big Bang theory?",
+    "options": [
+      "10 billion years",
+      "13.8 billion years",
+      "15 billion years",
+      "20 billion years"
+    ],
+    "answer": 1
+  }
+] 
