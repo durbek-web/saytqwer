@@ -116,6 +116,64 @@ function setStudentVisits(count) {
     localStorage.setItem('student_visits', count.toString());
 }
 
+// Standart test savollari (agar LocalStorage bo'sh bo'lsa)
+const defaultQuestions = [
+    {
+        text: "O'zbekiston Respublikasi Oliy Majlisining qonun chiqaruvchi organi hisoblanadi. U qanday tuzilishga ega?",
+        options: [
+            "Bir palatali tuzilishga ega",
+            "Ikki palatali tuzilishga ega", 
+            "Uch palatali tuzilishga ega"
+        ],
+        answer: 1
+    },
+    {
+        text: "O'zbekiston Respublikasining davlat tili qaysi til hisoblanadi?",
+        options: [
+            "O'zbek tili",
+            "Rus tili",
+            "Ingliz tili"
+        ],
+        answer: 0
+    },
+    {
+        text: "O'zbekiston Respublikasining poytaxti qaysi shahar?",
+        options: [
+            "Samarqand",
+            "Toshkent",
+            "Buxoro"
+        ],
+        answer: 1
+    },
+    {
+        text: "O'zbekiston Respublikasi mustaqillikka qachon erishdi?",
+        options: [
+            "1990 yil 31 avgust",
+            "1991 yil 31 avgust",
+            "1992 yil 31 avgust"
+        ],
+        answer: 1
+    },
+    {
+        text: "O'zbekiston Respublikasining davlat bayrog'i qanday ranglardan iborat?",
+        options: [
+            "Ko'k, oq va yashil",
+            "Oq, ko'k va qizil",
+            "Yashil, oq va ko'k"
+        ],
+        answer: 0
+    }
+];
+
+// Agar LocalStorage bo'sh bo'lsa, standart savollarni qo'shish
+function initializeDefaultQuestions() {
+    const questions = getQuestions();
+    if (questions.length === 0) {
+        setQuestions(defaultQuestions);
+        console.log('Standart test savollari qo\'shildi');
+    }
+}
+
 // Mavjud savollardan "Read the passage:" ni olib tashlash
 function cleanExistingQuestions() {
     const questions = getQuestions();
@@ -523,6 +581,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Mavjud savollarni tozalash
     cleanExistingQuestions();
+    
+    // Standart savollarni ishga tushirish
+    initializeDefaultQuestions();
     
     // Dastlabki ma'lumotlarni ko'rsatish
     updateStats();

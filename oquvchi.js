@@ -5,6 +5,61 @@ let answers = {};
 let testFinished = false;
 let currentStudent = null;
 
+// Standart test savollari (agar LocalStorage bo'sh bo'lsa)
+const defaultQuestions = [
+    {
+        text: "O'zbekiston Respublikasi Oliy Majlisining qonun chiqaruvchi organi hisoblanadi. U qanday tuzilishga ega?",
+        options: [
+            "Bir palatali tuzilishga ega",
+            "Ikki palatali tuzilishga ega", 
+            "Uch palatali tuzilishga ega"
+        ],
+        answer: 1
+    },
+    {
+        text: "O'zbekiston Respublikasining davlat tili qaysi til hisoblanadi?",
+        options: [
+            "O'zbek tili",
+            "Rus tili",
+            "Ingliz tili"
+        ],
+        answer: 0
+    },
+    {
+        text: "O'zbekiston Respublikasining poytaxti qaysi shahar?",
+        options: [
+            "Samarqand",
+            "Toshkent",
+            "Buxoro"
+        ],
+        answer: 1
+    },
+    {
+        text: "O'zbekiston Respublikasi mustaqillikka qachon erishdi?",
+        options: [
+            "1990 yil 31 avgust",
+            "1991 yil 31 avgust",
+            "1992 yil 31 avgust"
+        ],
+        answer: 1
+    },
+    {
+        text: "O'zbekiston Respublikasining davlat bayrog'i qanday ranglardan iborat?",
+        options: [
+            "Ko'k, oq va yashil",
+            "Oq, ko'k va qizil",
+            "Yashil, oq va ko'k"
+        ],
+        answer: 0
+    }
+];
+
+// Agar LocalStorage bo'sh bo'lsa, standart savollarni qo'shish
+if (questions.length === 0) {
+    localStorage.setItem('reading_questions', JSON.stringify(defaultQuestions));
+    questions = defaultQuestions;
+}
+
 // O'quvchi ma'lumotlarini saqlash
 function saveStudent(studentData) {
     const students = JSON.parse(localStorage.getItem('students_list') || '[]');
@@ -726,6 +781,12 @@ function sendRegistrationToTelegram(studentData) {
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', function() {
+    // Standart savollarni tekshirish va qo'shish
+    if (questions.length === 0) {
+        localStorage.setItem('reading_questions', JSON.stringify(defaultQuestions));
+        questions = defaultQuestions;
+    }
+    
     showRegistration();
     
     // Form submit event listener qo'shish
