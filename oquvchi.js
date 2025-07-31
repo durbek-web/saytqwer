@@ -210,6 +210,107 @@ const TEST_DATABASE = [
             "To produce hormones"
         ],
         answer: 1
+    },
+    // Yangi testlar - har xil javoblar bilan
+    {
+        text: "The Earth's atmosphere is composed primarily of nitrogen and oxygen, with trace amounts of other gases such as carbon dioxide, argon, and water vapor. The atmosphere plays a crucial role in protecting life on Earth by absorbing harmful ultraviolet radiation from the sun, regulating temperature through the greenhouse effect, and providing the oxygen necessary for respiration. What is the most abundant gas in Earth's atmosphere?",
+        options: [
+            "Oxygen",
+            "Carbon dioxide",
+            "Nitrogen",
+            "Argon"
+        ],
+        answer: 2
+    },
+    {
+        text: "The human heart is a muscular organ that pumps blood throughout the circulatory system. It has four chambers: two atria (upper chambers) and two ventricles (lower chambers). The heart beats approximately 60-100 times per minute at rest, pumping about 5 liters of blood per minute. The heart's electrical system controls the rhythm and rate of the heartbeat. How many chambers does the human heart have?",
+        options: [
+            "Two chambers",
+            "Three chambers",
+            "Four chambers",
+            "Five chambers"
+        ],
+        answer: 2
+    },
+    {
+        text: "The solar system consists of the Sun and the objects that orbit it, including eight planets, dwarf planets, moons, asteroids, comets, and other celestial bodies. The four inner planets (Mercury, Venus, Earth, and Mars) are terrestrial planets with solid surfaces, while the four outer planets (Jupiter, Saturn, Uranus, and Neptune) are gas giants. Which planet is closest to the Sun?",
+        options: [
+            "Venus",
+            "Mercury",
+            "Earth",
+            "Mars"
+        ],
+        answer: 1
+    },
+    {
+        text: "The human skeleton is the internal framework of the body, consisting of 206 bones in adults. The skeleton provides structural support, protects vital organs, enables movement through joints and muscles, produces blood cells in the bone marrow, and stores minerals such as calcium and phosphorus. The skeleton is divided into two main parts: the axial skeleton (skull, spine, and rib cage) and the appendicular skeleton (limbs and their attachments). How many bones are in the adult human skeleton?",
+        options: [
+            "150 bones",
+            "206 bones",
+            "250 bones",
+            "300 bones"
+        ],
+        answer: 1
+    },
+    {
+        text: "The process of cellular respiration occurs in the mitochondria of cells and converts glucose and oxygen into carbon dioxide, water, and energy in the form of ATP (adenosine triphosphate). This process is essential for providing energy to cells and is the opposite of photosynthesis. Cellular respiration occurs in three main stages: glycolysis, the Krebs cycle, and the electron transport chain. What is the primary energy molecule produced during cellular respiration?",
+        options: [
+            "Glucose",
+            "ATP",
+            "Oxygen",
+            "Carbon dioxide"
+        ],
+        answer: 1
+    },
+    {
+        text: "The human eye is a complex sensory organ that detects light and converts it into electrical signals that are sent to the brain for processing. The eye contains several important structures, including the cornea, iris, pupil, lens, retina, and optic nerve. The retina contains photoreceptor cells called rods and cones that are responsible for detecting light and color. What are the two types of photoreceptor cells in the retina?",
+        options: [
+            "Rods and cones",
+            "Nerves and muscles",
+            "Blood vessels and tissues",
+            "Bones and cartilage"
+        ],
+        answer: 0
+    },
+    {
+        text: "The human ear is responsible for hearing and balance. It consists of three main parts: the outer ear, middle ear, and inner ear. The outer ear collects sound waves and directs them to the eardrum. The middle ear contains three small bones that amplify sound vibrations. The inner ear contains the cochlea, which converts sound vibrations into electrical signals, and the vestibular system, which helps maintain balance. What are the three main parts of the human ear?",
+        options: [
+            "Outer ear, middle ear, and inner ear",
+            "Left ear, right ear, and brain",
+            "Eardrum, bones, and nerves",
+            "Skin, muscle, and bone"
+        ],
+        answer: 0
+    },
+    {
+        text: "The human liver is the largest internal organ and performs over 500 vital functions. It processes nutrients from food, produces bile to help digest fats, filters toxins from the blood, stores vitamins and minerals, and helps regulate blood sugar levels. The liver is also capable of regenerating itself, which is why it can recover from damage and why liver transplants can involve living donors. What is the largest internal organ in the human body?",
+        options: [
+            "Heart",
+            "Brain",
+            "Liver",
+            "Lungs"
+        ],
+        answer: 2
+    },
+    {
+        text: "The human skin is the largest organ of the body and serves as a protective barrier against the external environment. It consists of three main layers: the epidermis (outer layer), dermis (middle layer), and hypodermis (inner layer). The skin helps regulate body temperature, protects against harmful substances, and contains sensory receptors for touch, temperature, and pain. What is the largest organ of the human body?",
+        options: [
+            "Heart",
+            "Brain",
+            "Liver",
+            "Skin"
+        ],
+        answer: 3
+    },
+    {
+        text: "The human lungs are the primary organs of respiration, responsible for exchanging oxygen and carbon dioxide between the body and the environment. Each lung is divided into lobes (three in the right lung, two in the left lung) and contains millions of tiny air sacs called alveoli where gas exchange occurs. The lungs work together with the heart and circulatory system to deliver oxygen to all cells in the body. How many lobes does the right lung have?",
+        options: [
+            "One lobe",
+            "Two lobes",
+            "Three lobes",
+            "Four lobes"
+        ],
+        answer: 2
     }
 ];
 

@@ -475,7 +475,7 @@ function loadAutoTestSettings() {
 // Avtomatik test statistikalarini yangilash
 function updateAutoTestStats() {
     const usedTests = JSON.parse(localStorage.getItem('used_tests') || '[]');
-    const totalTests = 20; // TEST_DATABASE length
+    const totalTests = 30; // Yangilangan TEST_DATABASE length
     const remainingTests = totalTests - usedTests.length;
     const lastAdded = localStorage.getItem('last_test_completion');
     
@@ -502,7 +502,7 @@ function testAutoTestSystem() {
     // Test qo'shish simulyatsiyasi
     const testCount = settings.testCount || 7;
     const usedTests = JSON.parse(localStorage.getItem('used_tests') || '[]');
-    const availableTests = 20 - usedTests.length;
+    const availableTests = 30 - usedTests.length; // Yangilangan son
     
     if (availableTests < testCount) {
         alert(`Faqat ${availableTests} ta test qoldi! Avval testlar bazasini to'ldiring.`);
